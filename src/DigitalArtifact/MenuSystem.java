@@ -1,4 +1,4 @@
-package ITP_Week3;
+package DigitalArtifact;
 
 import java.util.Scanner;
 
