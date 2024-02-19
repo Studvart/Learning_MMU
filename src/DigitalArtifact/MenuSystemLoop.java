@@ -18,11 +18,12 @@ public class MenuSystemLoop {
         System.out.printf("Welcome to the programme %s %s. Congratulations on working\nfor %s for %d years.\nNow, let’s begin…", firstName, surname, companyName, yearsAtCompany);
 
         //Menu Selection via switch statement
-        System.out.println("In this programme you have 4 choices:\n" +
-                "Option 1: See your full name \n" +
-                "Option 2: Remember where you work\n" +
-                "Option 3: See how many years you have left until retirement\n" +
-                "Option 4: Hear some personalised words of encouragement");
+        System.out.println("""
+                In this programme you have 4 choices:
+                Option 1: See your full name\s
+                Option 2: Remember where you work
+                Option 3: See how many years you have left until retirement
+                Option 4: Hear some personalised words of encouragement""");
 
         int option;
 
@@ -38,20 +39,28 @@ public class MenuSystemLoop {
 
             switch (option) {
                 case 1:
-                    System.out.printf("Great job, you have selected the first option.\n" +
-                            "Your name is %s %s.\n", firstName, surname);
+                    System.out.printf("""
+                            Great job, you have selected the first option.
+                            Your name is %s %s.
+                            """, firstName, surname);
                     break;
                 case 2:
-                    System.out.printf("Great job %s, you have selected the second option.\n" +
-                            "You work at %s.\n", firstName, companyName);
+                    System.out.printf("""
+                            Great job %s, you have selected the second option.
+                            You work at %s.
+                            """, firstName, companyName);
                     break;
                 case 3:
-                    System.out.printf("Great job %s, you have selected the third option.\n" +
-                            "Most people work for 35 years, so you have %d to go.\n", firstName, (35 - yearsAtCompany));
+                    System.out.printf("""
+                            Great job %s, you have selected the third option.
+                            Most people work for 35 years, so you have %d to go.
+                            """, firstName, (35 - yearsAtCompany));
                     break;
                 case 4:
-                    System.out.printf("Great job %s, you have selected the third option.\n" +
-                            "You can sleep when you are dead, which isn't yet.\n", firstName);
+                    System.out.printf("""
+                            Great job %s, you have selected the third option.
+                            You can sleep when you are dead, which isn't yet.
+                            """, firstName);
                     break;
 
             }
