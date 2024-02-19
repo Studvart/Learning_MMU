@@ -18,6 +18,7 @@ public class Decode {
         dictionary.replace(8, "l");
         dictionary.replace(14, "z");
         dictionary.replace(21, "q");
+        //dictionary.replace(19, "u");
 
         System.out.println("Please see the codex\n" + Arrays.toString(codedValue));
         System.out.println("This dictionary shows the mappings of the codex to the alphabet\n" + dictionary);
