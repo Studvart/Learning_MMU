@@ -58,7 +58,7 @@ public class MenuSystemLoop {
                     break;
                 case 4:
                     System.out.printf("""
-                            Great job %s, you have selected the third option.
+                            Great job %s, you have selected the forth option.
                             You can sleep when you are dead, which isn't yet.
                             """, firstName);
                     break;
@@ -66,8 +66,9 @@ public class MenuSystemLoop {
             }
             System.out.println("Do you want to continue? (Yes/No)");
             optionContinue = scanner.next();
+            optionContinue = optionContinue.toLowerCase(); // Error handles for mismatched case
             // Validates user input is acceptable value
-            if (!(optionContinue.equals("Yes") || optionContinue.equals("No"))) {
+            if (!(optionContinue.equals("yes") || optionContinue.equals("no") || optionContinue.equals("n") || optionContinue.equals("y"))) {
                 //Where invalid - offer opportunity to enter valid input
                 System.out.printf("%s is not a valid input.\n", optionContinue);
                 System.out.println("Do you want to continue? (Yes/No)");
