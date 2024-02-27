@@ -199,10 +199,9 @@ public class Refactored {
     }
 
     public static void propertyDetailsCaptureClaimsIndicator() {
-        String claimsPreConversion = "";
 
         System.out.println("Have you made any home insurance claims in the last 5 years? (Y/N)");
-        claimsPreConversion = scanner.nextLine();
+        String claimsPreConversion = scanner.nextLine();
         claimsIndicator = Refactored.validatedOutputToIndicator(claimsPreConversion);
         if (claimsIndicator != 0) {
             Refactored.propertyDetailsCaptureClaimsVolume();
@@ -220,20 +219,18 @@ public class Refactored {
     }
 
     public static void propertyDetailsCaptureSubsidenceIndicator() {
-        String subsidencePreConversion = "";
 
         System.out.printf("Have you ever made a claim for subsidence whilst living at %s, %s? (Y/N)\n", addressFirstLine, addressPostCode);
         scanner.nextLine();
-        subsidencePreConversion = scanner.nextLine();
+        String subsidencePreConversion = scanner.nextLine();
         subsidenceIndicator = Refactored.validatedOutputToIndicator(subsidencePreConversion);
         System.out.println();
     }
 
     public static void propertyDetailsCaptureSmokersIndicator() {
-        String smokerPreConversion = "";
 
         System.out.printf("Is %s a smoker? (Y/N)\n", firstName);
-        smokerPreConversion = scanner.nextLine();
+        String smokerPreConversion = scanner.nextLine();
         smokersIndicator = Refactored.validatedOutputToIndicator(smokerPreConversion);
         System.out.println();
     }
