@@ -52,6 +52,24 @@ public class Refactored {
                 We need to know about the cover you would like to take to cover %s, %s.
                 """, firstName, addressFirstLine, addressPostCode);
 
+        Refactored.propertyDetailsCaptureHomeValue();
+        Refactored.propertyDetailsCaptureBuildingsLimit();
+        Refactored.propertyDetailsCaptureContentsLimit();
+        Refactored.propertyDetailsCaptureSubsidenceIndicator();
+        Refactored.propertyDetailsCaptureClaimsIndicator();
+        Refactored.propertyDetailsCaptureSmokersIndicator();
+
+        //Menu Selection via switch statement
+        Refactored.propertyDetailsCaptureSummary();
+        TimeUnit.SECONDS.sleep(3);
+        do {
+            Refactored.propertyDetailsEditMenu();
+            TimeUnit.SECONDS.sleep(1);
+            Refactored.propertyDetailsEditSelector();
+            TimeUnit.SECONDS.sleep(3);
+            Refactored.propertyDetailsCaptureSummary();
+        } while (menuOption != 7);
+
         System.out.println("The programme will exit now. Goodbye!");
 
         scanner.close();
@@ -105,7 +123,6 @@ public class Refactored {
         // Made menu too long for user. Could consider inner loop to offer updating one, both, neither.
         System.out.println("""
                 Review the above details. If any are incorrect you can amend via the following options:
-                                
                 Option 1: Amend your first name
                 Option 2: Amend your surname
                 Option 3: Amend your address - first line
@@ -163,6 +180,12 @@ public class Refactored {
 
     }
 
+    public static void propertyDetailsCaptureHomeValue() {
+        System.out.println("What is the current value of your home?");
+        homeValue = scanner.nextInt();
+        System.out.println();
+    }
+
     public static void propertyDetailsCaptureBuildingsLimit() {
         System.out.println("How much would you like to insure your home for, including rebuild costs?");
         buildingsLimit = scanner.nextInt();
@@ -170,51 +193,103 @@ public class Refactored {
     }
 
     public static void propertyDetailsCaptureContentsLimit() {
-        System.out.println("How much would you like to insure your home for?");
+        System.out.println("How much would you like to insure the contents in your home for?");
         contentsLimit = scanner.nextInt();
         System.out.println();
     }
 
-    public static void propertyDetailsCaptureHomeValue() {
-        System.out.println("What is the current value of your home?");
-        homeValue = scanner.nextInt();
-        System.out.println();
-    }
-
     public static void propertyDetailsCaptureClaimsIndicator() {
-        System.out.println("Have you ?");
-        claimsIndicator = scanner.nextInt();
+        String claimsPreConversion = "";
+
+        System.out.println("Have you made any home insurance claims in the last 5 years? (Y/N)");
+        claimsPreConversion = scanner.nextLine();
+        claimsIndicator = Refactored.validatedOutputToIndicator(claimsPreConversion);
+        if (claimsIndicator != 0) {
+            Refactored.propertyDetailsCaptureClaimsVolume();
+        } else {
+            claimsVolume = 0;
+        }
         System.out.println();
     }
 
     public static void propertyDetailsCaptureClaimsVolume() {
-        System.out.println("What is your surname?");
+        System.out.println("How many home insurance claims have you made in the last 5 years?");
+        scanner.nextLine();
         claimsVolume = scanner.nextInt();
         System.out.println();
     }
 
     public static void propertyDetailsCaptureSubsidenceIndicator() {
-        System.out.println("What is your surname?");
-        subsidenceIndicator = scanner.nextInt();
+        String subsidencePreConversion = "";
+
+        System.out.printf("Have you ever made a claim for subsidence whilst living at %s, %s? (Y/N)\n", addressFirstLine, addressPostCode);
+        scanner.nextLine();
+        subsidencePreConversion = scanner.nextLine();
+        subsidenceIndicator = Refactored.validatedOutputToIndicator(subsidencePreConversion);
         System.out.println();
     }
 
     public static void propertyDetailsCaptureSmokersIndicator() {
-        System.out.println("What is your surname?");
-        smokersIndicator = scanner.nextInt();
+        String smokerPreConversion = "";
+
+        System.out.printf("Is %s a smoker? (Y/N)\n", firstName);
+        smokerPreConversion = scanner.nextLine();
+        smokersIndicator = Refactored.validatedOutputToIndicator(smokerPreConversion);
         System.out.println();
     }
 
     public static void propertyDetailsCaptureSummary() throws InterruptedException {
+        String subsidenceTemp;
+        if (subsidenceIndicator == 0) {
+            subsidenceTemp = "You have never suffered subsidence.";
+        } else {
+            subsidenceTemp = "You have previously suffered subsidence.";
+        }
+        String claimsTemp;
+        if (claimsIndicator == 0) {
+            claimsTemp = "You have not made any claims in the last 5 years.";
+        } else {
+            claimsTemp = "You have made claim(s) in the last 5 years.";
+        }
+        String smokersTemp;
+        if (smokersIndicator == 0) {
+            smokersTemp = "You are not a smoker.";
+        } else {
+            smokersTemp = "You are a smoker.";
+        }
         System.out.printf("""
                 We have captured the following details:
                 Your home is worth %d and you would like to be insured up to a rebuild cost of %d.
-                Your contents will be insured up to %d
+                Your contents will be insured up to %d.
+                %s
+                %s
                 You have made %d claims.
+                %s
                                 
                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                """, homeValue, buildingsLimit, contentsLimit, claimsVolume);
+                """, homeValue, buildingsLimit, contentsLimit, subsidenceTemp, claimsTemp, claimsVolume, smokersTemp);
         TimeUnit.SECONDS.sleep(3);
+    }
+
+    public static int validatedOutputToIndicator(String inputString) {
+        char inputChar;
+        int generatedIndicator;
+
+        inputString = inputString.toLowerCase();// Error handles for mismatched case
+        // Validates user input is acceptable value
+        while (!(inputString.equals("yes") || inputString.equals("no") || inputString.equals("n") || inputString.equals("y"))) {
+            System.out.printf("%s is not a valid input.\n", inputString);
+            System.out.println("Acceptable values are Y or N");
+            inputString = scanner.nextLine();
+            inputString = inputString.toLowerCase();
+        }
+        inputChar = inputString.charAt(0);
+        if (inputChar == 'y') {
+            generatedIndicator = 1;
+        } else {
+            generatedIndicator = 0;
+        }
+        return generatedIndicator;
     }
 
     public static void propertyDetailsEditMenu() {
@@ -222,9 +297,8 @@ public class Refactored {
         // Made menu too long for user. Could consider inner loop to offer updating one, both, neither.
         System.out.println("""
                 Review the above details. If any are incorrect you can amend via the following options:
-                                
-                Option 1: Amend the buildings sum insured you require
-                Option 2: Amend the value of your home
+                Option 1: Amend the value of your home
+                Option 2: Amend the buildings sum insured you require
                 Option 3: Amend the contents sum insured you require
                 Option 4: Amend your historic subsidence status
                 Option 5: Amend your claims status and number of claims
@@ -249,11 +323,11 @@ public class Refactored {
         switch (menuOption) {
             case 1:
                 scanner.nextLine();
-                Refactored.propertyDetailsCaptureBuildingsLimit();
+                Refactored.propertyDetailsCaptureHomeValue();
                 break;
             case 2:
                 scanner.nextLine();
-                Refactored.propertyDetailsCaptureHomeValue();
+                Refactored.propertyDetailsCaptureBuildingsLimit();
                 break;
             case 3:
                 scanner.nextLine();
@@ -266,9 +340,6 @@ public class Refactored {
             case 5:
                 scanner.nextLine();
                 Refactored.propertyDetailsCaptureClaimsIndicator();
-                if (claimsIndicator != 0){
-
-                }
                 break;
             case 6:
                 scanner.nextLine();
