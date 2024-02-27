@@ -2,13 +2,13 @@ package DigitalArtifact;
 
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+// What is the purpose of your use case? Home Insurance Price Generator
+// How is your use case personalised to you? Aligned to Role
 
 
 public class Refactored {
-    // What is the purpose of your use case?
-    // How is your use case personalised to you?
     // What information does your use case need to collect from the user?
-    // What methods will you provide on the collected data?
+
 
     public static Scanner scanner = new Scanner(System.in);
     public static String firstName = "";
@@ -76,6 +76,7 @@ public class Refactored {
 
     }
 
+    // What methods will you provide on the collected data?
     public static void personalDetailsCaptureFirstName() {
         System.out.println("What is your first name?");
         firstName = scanner.nextLine();
