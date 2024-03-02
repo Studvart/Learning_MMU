@@ -2,13 +2,20 @@ package DigitalArtifact;
 
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
-// What is the purpose of your use case? Home Insurance Price Generator
-// How is your use case personalised to you? Aligned to Role
+/*
+What is the purpose of your use case?
+Home Insurance Price Generator
+
+How is your use case personalised to you? Aligned to Role
+
+What information does your use case need to collect from the user?
+
+What methods will you provide on the collected data?
+
+*/
 
 
 public class Refactored {
-    // What information does your use case need to collect from the user?
-
 
     public static Scanner scanner = new Scanner(System.in);
     public static String firstName = "";
@@ -24,8 +31,12 @@ public class Refactored {
     public static int claimsVolume = 0;
     public static int subsidenceIndicator = 0;
     public static int smokersIndicator = 0;
+    public static double anchorRiskDouble = 0.00;
+    public static double customerPrice = 0.00;
+
 
     public static void main(String[] args) throws InterruptedException {
+
         System.out.println("""
                 Hello and welcome to the programme. Before we start, lets collect some data about you.
                 """);
@@ -70,13 +81,25 @@ public class Refactored {
             Refactored.propertyDetailsCaptureSummary();
         } while (menuOption != 7);
 
-        System.out.println("The programme will exit now. Goodbye!");
+        //Quote or Decline based on user inputs
+        //Decline and End
+        if (subsidenceIndicator == 1 || claimsVolume > 3) {
+            System.out.printf("""
+                    We are really sorry %s, we are unable to provide you a quote at this time.
+                    We hope you find alternative arrangements for %s, %s.
+                    Please consider us again in the future.
+                    """, firstName, addressFirstLine, addressPostCode);
+            System.exit(0); //End Programme
+        }
+        //Continue to Quote
 
+
+        System.out.println("The programme will exit now. Goodbye!");
         scanner.close();
 
     }
 
-    // What methods will you provide on the collected data?
+    //Customer Detail Capture
     public static void personalDetailsCaptureFirstName() {
         System.out.println("What is your first name?");
         firstName = scanner.nextLine();
@@ -107,6 +130,7 @@ public class Refactored {
         System.out.println();
     }
 
+    // Customer Recap, Menu and Edit
     public static void personalDetailsCaptureSummary() throws InterruptedException {
         System.out.printf("""
                 We have captured the following details:
@@ -181,6 +205,7 @@ public class Refactored {
 
     }
 
+    // Property Detail Capture
     public static void propertyDetailsCaptureHomeValue() {
         System.out.println("What is the current value of your home?");
         homeValue = scanner.nextInt();
@@ -236,6 +261,7 @@ public class Refactored {
         System.out.println();
     }
 
+    // Property Recap, Menu and Edit
     public static void propertyDetailsCaptureSummary() throws InterruptedException {
         String subsidenceTemp;
         if (subsidenceIndicator == 0) {
@@ -267,27 +293,6 @@ public class Refactored {
                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                 """, homeValue, buildingsLimit, contentsLimit, subsidenceTemp, claimsTemp, claimsVolume, smokersTemp);
         TimeUnit.SECONDS.sleep(3);
-    }
-
-    public static int validatedOutputToIndicator(String inputString) {
-        char inputChar;
-        int generatedIndicator;
-
-        inputString = inputString.toLowerCase();// Error handles for mismatched case
-        // Validates user input is acceptable value
-        while (!(inputString.equals("yes") || inputString.equals("no") || inputString.equals("n") || inputString.equals("y"))) {
-            System.out.printf("%s is not a valid input.\n", inputString);
-            System.out.println("Acceptable values are Y or N");
-            inputString = scanner.nextLine();
-            inputString = inputString.toLowerCase();
-        }
-        inputChar = inputString.charAt(0);
-        if (inputChar == 'y') {
-            generatedIndicator = 1;
-        } else {
-            generatedIndicator = 0;
-        }
-        return generatedIndicator;
     }
 
     public static void propertyDetailsEditMenu() {
@@ -348,6 +353,86 @@ public class Refactored {
 
         }
 
+    }
+
+    // Pricing generation
+    // AKA getRandomDouble_Between
+    public static double generateRiskDouble(int min, int max) {
+        double generate = ((Math.random() * (max - min)) + min);
+        double truncated;
+
+        if (anchorRiskDouble == 0.00) {
+            if (generate >= 0) { //multiplication by 100 maintains 2 decimal place numbers. Subsequent division restores it as a double.
+                truncated = Math.floor(generate * 100) / 100; //Rounds down to whole integer closer to 0
+            } else {
+                truncated = Math.ceil(generate * 100) / 100; //Rounds up to whole integer closer to 0
+            }
+        } else
+            truncated = anchorRiskDouble; //Step stores the 1st value determined for re-use. In case of detail updates which change modifiers. Otherwise price will go all over the place.
+        return truncated;
+
+    }
+
+    public static void preKickOutDoubleCheck() {
+        //Decline and End
+        if (subsidenceIndicator == 1 || claimsVolume > 3) {
+            if (subsidenceIndicator == 1) {
+                System.out.printf("""
+                        Please can we confirm that you have previously suffered subsidence whilst living at:
+                        %s, %s""", addressFirstLine, addressPostCode);
+                String preValidate = scanner.nextLine();
+                if (Refactored.validatedOutputToIndicator(preValidate) == 1) {
+                    Refactored.kickOutAction();
+                }
+            } else if (claimsVolume > 3) {
+                System.out.printf("""
+                        Please can we confirm that you have previously suffered subsidence whilst living at:
+                        %s, %s""", addressFirstLine, addressPostCode);
+                String preValidate = scanner.nextLine();
+                if (Refactored.validatedOutputToIndicator(preValidate) == 1) {
+                    Refactored.kickOutAction();
+                }//else if
+            }//if2
+        }//if1
+
+    }
+
+    public static void kickOutAction() {
+
+        System.out.printf("""
+                We are really sorry %s, we are unable to provide you a quote at this time.
+                We hope you find alternative arrangements for %s, %s.
+                Please consider us again in the future.
+                """, firstName, addressFirstLine, addressPostCode);
+        System.exit(0); //End Programme
+    }
+
+    // AKA getRandomInt_Between
+    public static int generateRiskInt(int min, int max) {
+        double generate = ((Math.random() * (max - min)) + min);
+        return (int) generate;
+    }
+
+    // Validation -- Forces valid input and Converts Y/N to 1/0
+    public static int validatedOutputToIndicator(String inputString) {
+        char inputChar;
+        int generatedIndicator;
+
+        inputString = inputString.toLowerCase();// Error handles for mismatched case
+        // Validates user input is acceptable value
+        while (!(inputString.equals("yes") || inputString.equals("no") || inputString.equals("n") || inputString.equals("y"))) {
+            System.out.printf("%s is not a valid input.\n", inputString);
+            System.out.println("Acceptable values are Y or N");
+            inputString = scanner.nextLine();
+            inputString = inputString.toLowerCase();
+        }
+        inputChar = inputString.charAt(0);
+        if (inputChar == 'y') {
+            generatedIndicator = 1;
+        } else {
+            generatedIndicator = 0;
+        }
+        return generatedIndicator;
     }
 
 
