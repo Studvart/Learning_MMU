@@ -3,17 +3,16 @@ package DigitalArtifact;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 /*
-What is the purpose of your use case?
-Home Insurance Price Generator
-
-How is your use case personalised to you? Aligned to Role
-
-What information does your use case need to collect from the user?
-
-What methods will you provide on the collected data?
-
+What is the purpose of your use case? -- Home Insurance Price Journey Simulator
+How is your use case personalised to you? -- Facilitates thinking of all the smaller parts of our full journey to appreciate moving parts.
+What information does your use case need to collect from the user? -- Personal, property and cover related details.
+What methods will you provide on the collected data? -- Methods to confirm:
+ - validation
+ - collect data // re-run as required
+ - menu selection
+ - play back data to user
+ - pricing based on collected factors
 */
-
 
 public class Refactored {
 
@@ -32,14 +31,15 @@ public class Refactored {
     public static int subsidenceIndicator = 0;
     public static int smokersIndicator = 0;
     public static double anchorRiskDouble = 0.00;
+    public static double anchorMaxPremium = 1200.00; //Business Rule
     public static double customerPrice = 0.00;
 
 
     public static void main(String[] args) throws InterruptedException {
-
         System.out.println("""
                 Hello and welcome to the programme. Before we start, lets collect some data about you.
                 """);
+
         // Collection methods. Reusable if details incorrect.
         Refactored.personalDetailsCaptureFirstName();
         Refactored.personalDetailsCaptureSurname();
@@ -58,11 +58,13 @@ public class Refactored {
             Refactored.personalDetailsCaptureSummary();
         } while (menuOption != 7);
 
+        //Transitional Message
         System.out.printf("""
                 Great, thanks %s. In order to give you a quote for your home insurance, we need some more information.
                 We need to know about the cover you would like to take to cover %s, %s.
                 """, firstName, addressFirstLine, addressPostCode);
 
+        // Collection methods. Reusable if details incorrect.
         Refactored.propertyDetailsCaptureHomeValue();
         Refactored.propertyDetailsCaptureBuildingsLimit();
         Refactored.propertyDetailsCaptureContentsLimit();
@@ -82,21 +84,13 @@ public class Refactored {
         } while (menuOption != 7);
 
         //Quote or Decline based on user inputs
-        //Decline and End
-        if (subsidenceIndicator == 1 || claimsVolume > 3) {
-            System.out.printf("""
-                    We are really sorry %s, we are unable to provide you a quote at this time.
-                    We hope you find alternative arrangements for %s, %s.
-                    Please consider us again in the future.
-                    """, firstName, addressFirstLine, addressPostCode);
-            System.exit(0); //End Programme
-        }
+        //Decline and End check. "Business Rules" validation step.
+        Refactored.preKickOutDoubleCheck();
         //Continue to Quote
 
-
+        //End of Journey
         System.out.println("The programme will exit now. Goodbye!");
         scanner.close();
-
     }
 
     //Customer Detail Capture
@@ -160,8 +154,8 @@ public class Refactored {
 
     public static void customerDetailsEditSelector() {
 
-
-        do { //Adding Do While loop to accept valid actions only
+        do {
+            //Adding Do While loop to accept valid actions only
             System.out.println("Enter a number from those on screen to continue.");
             menuOption = scanner.nextInt();
             System.out.println();
@@ -169,8 +163,7 @@ public class Refactored {
                 System.out.printf("%d is not a valid input.\n", menuOption);
             }
         } while (!(menuOption > 0 && menuOption < 8));
-
-
+        //Menu Selection
         switch (menuOption) {
             case 1:
                 scanner.nextLine();
@@ -195,14 +188,11 @@ public class Refactored {
             case 6:
                 System.out.printf("""
                         %s, you can sleep when you are dead, which isn't yet.
-                                  
                         """, firstName);
                 break;
             case 7:
                 break;
-
         }
-
     }
 
     // Property Detail Capture
@@ -225,11 +215,13 @@ public class Refactored {
     }
 
     public static void propertyDetailsCaptureClaimsIndicator() {
-
-        System.out.println("Have you made any home insurance claims in the last 5 years? (Y/N)");
+        System.out.println("""
+                Have you made any home insurance claims in the last 5 years?
+                Confirm (Y/N)""");
         String claimsPreConversion = scanner.nextLine();
         claimsIndicator = Refactored.validatedOutputToIndicator(claimsPreConversion);
         if (claimsIndicator != 0) {
+            //Only run the capture of number of claims when claims have been made in the last 5 years. "Business Rule" not consider older.
             Refactored.propertyDetailsCaptureClaimsVolume();
         } else {
             claimsVolume = 0;
@@ -245,8 +237,10 @@ public class Refactored {
     }
 
     public static void propertyDetailsCaptureSubsidenceIndicator() {
-
-        System.out.printf("Have you ever made a claim for subsidence whilst living at %s, %s? (Y/N)\n", addressFirstLine, addressPostCode);
+        System.out.printf("""
+                Have you ever made a claim for subsidence whilst living at %s, %s?
+                Confirm (Y/N)
+                """, addressFirstLine, addressPostCode);
         scanner.nextLine();
         String subsidencePreConversion = scanner.nextLine();
         subsidenceIndicator = Refactored.validatedOutputToIndicator(subsidencePreConversion);
@@ -254,15 +248,17 @@ public class Refactored {
     }
 
     public static void propertyDetailsCaptureSmokersIndicator() {
-
-        System.out.printf("Is %s a smoker? (Y/N)\n", firstName);
+        System.out.printf("""
+                Is %s a smoker?
+                Confirm (Y/N)
+                """, firstName);
         String smokerPreConversion = scanner.nextLine();
         smokersIndicator = Refactored.validatedOutputToIndicator(smokerPreConversion);
         System.out.println();
     }
 
-    // Property Recap, Menu and Edit
     public static void propertyDetailsCaptureSummary() throws InterruptedException {
+        //Property Recap, Menu and Edit
         String subsidenceTemp;
         if (subsidenceIndicator == 0) {
             subsidenceTemp = "You have never suffered subsidence.";
@@ -289,7 +285,6 @@ public class Refactored {
                 %s
                 You have made %d claims.
                 %s
-                                
                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                 """, homeValue, buildingsLimit, contentsLimit, subsidenceTemp, claimsTemp, claimsVolume, smokersTemp);
         TimeUnit.SECONDS.sleep(3);
@@ -311,19 +306,20 @@ public class Refactored {
     }
 
     public static void propertyDetailsEditSelector() {
-
-
-        do { //Adding Do While loop to accept valid actions only
+        do {
+            //Adding Do While loop to accept valid actions only
             System.out.println("Enter a number from those on screen to continue.");
             menuOption = scanner.nextInt();
             System.out.println();
             if (!(menuOption > 0 && menuOption < 8)) {
-                System.out.printf("%d is not a valid input.\n", menuOption);
+                System.out.printf("""
+                        %d is not a valid input.
+                        """, menuOption);
             }
         } while (!(menuOption > 0 && menuOption < 8));
-
-
+        //Menu Selection
         switch (menuOption) {
+            //Run a specific Method dependent on what the user selection
             case 1:
                 scanner.nextLine();
                 Refactored.propertyDetailsCaptureHomeValue();
@@ -350,14 +346,12 @@ public class Refactored {
                 break;
             case 7:
                 break;
-
         }
-
     }
 
     // Pricing generation
-    // AKA getRandomDouble_Between
     public static double generateRiskDouble(int min, int max) {
+        // AKA getRandomDouble_Between
         double generate = ((Math.random() * (max - min)) + min);
         double truncated;
 
@@ -370,35 +364,56 @@ public class Refactored {
         } else
             truncated = anchorRiskDouble; //Step stores the 1st value determined for re-use. In case of detail updates which change modifiers. Otherwise price will go all over the place.
         return truncated;
-
     }
 
+    public static void test() {
+        //Price
+    }
+
+    //Business Rules
     public static void preKickOutDoubleCheck() {
         //Decline and End
-        if (subsidenceIndicator == 1 || claimsVolume > 3) {
-            if (subsidenceIndicator == 1) {
+        if (subsidenceIndicator == 1 || claimsVolume >= 3) {
+            //Individual message presented dependent on factors captured from user.
+            if (subsidenceIndicator == 1 && claimsVolume < 3) {
                 System.out.printf("""
-                        Please can we confirm that you have previously suffered subsidence whilst living at:
-                        %s, %s""", addressFirstLine, addressPostCode);
+                        Please can we confirm that:
+                        - You have previously suffered subsidence whilst living at:
+                        %s, %s
+                        Confirm (Y/N)
+                        """, addressFirstLine, addressPostCode);
                 String preValidate = scanner.nextLine();
                 if (Refactored.validatedOutputToIndicator(preValidate) == 1) {
                     Refactored.kickOutAction();
                 }
-            } else if (claimsVolume > 3) {
-                System.out.printf("""
-                        Please can we confirm that you have previously suffered subsidence whilst living at:
-                        %s, %s""", addressFirstLine, addressPostCode);
+            } else if (subsidenceIndicator == 0 && claimsVolume >= 3) {
+                System.out.println("""
+                        Please can we confirm that:
+                        - You have previously made 3 or more home insurance claims
+                        Confirm (Y/N)
+                        """);
                 String preValidate = scanner.nextLine();
                 if (Refactored.validatedOutputToIndicator(preValidate) == 1) {
                     Refactored.kickOutAction();
-                }//else if
-            }//if2
-        }//if1
-
+                }
+            } else {
+                System.out.printf("""
+                        Please can we confirm that:
+                        - You have previously made 3 or more home insurance claims
+                        - You have previously suffered subsidence whilst living at:
+                        %s, %s
+                        Confirm (Y/N)
+                        """, addressFirstLine, addressPostCode);
+                String preValidate = scanner.nextLine();
+                if (Refactored.validatedOutputToIndicator(preValidate) == 1) {
+                    Refactored.kickOutAction();
+                }//if1
+            }
+        }
     }
 
     public static void kickOutAction() {
-
+        //Used to end the programme. Usually due to being outside simulated "business" rules.
         System.out.printf("""
                 We are really sorry %s, we are unable to provide you a quote at this time.
                 We hope you find alternative arrangements for %s, %s.
@@ -407,14 +422,14 @@ public class Refactored {
         System.exit(0); //End Programme
     }
 
-    // AKA getRandomInt_Between
     public static int generateRiskInt(int min, int max) {
+        // AKA getRandomInt_Between
         double generate = ((Math.random() * (max - min)) + min);
         return (int) generate;
     }
 
-    // Validation -- Forces valid input and Converts Y/N to 1/0
     public static int validatedOutputToIndicator(String inputString) {
+        // Validation -- Forces valid input and Converts Y/N to 1/0
         char inputChar;
         int generatedIndicator;
 
@@ -434,6 +449,4 @@ public class Refactored {
         }
         return generatedIndicator;
     }
-
-
 }
