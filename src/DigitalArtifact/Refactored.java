@@ -24,13 +24,19 @@ public class Refactored {
     public static int yearsAtAddress = 0;
     public static int menuOption = 0;
     public static int buildingsLimit = 0;
+    public static int buildingsInd = 0;
     public static int homeValue = 0;
     public static int contentsLimit = 0;
+    public static int contentsInd = 0;
     public static int claimsIndicator = 0;
     public static int claimsVolume = 0;
     public static int subsidenceIndicator = 0;
     public static int smokersIndicator = 0;
+    public static int combinedInd = 0;
     public static double anchorRiskDouble = 0.00;
+    public static double anchorMinContentsOnlyPremium = 50.00; //Business Rule
+    public static double anchorMinBuildingsOnlyPremium = 100.00; //Business Rule
+    public static double anchorMinCombinedPremium = 120.00; //Business Rule - 0.8 modifier for combined
     public static double anchorMaxPremium = 1200.00; //Business Rule
     public static double customerPrice = 0.00;
 
@@ -203,15 +209,31 @@ public class Refactored {
     }
 
     public static void propertyDetailsCaptureBuildingsLimit() {
-        System.out.println("How much would you like to insure your home for, including rebuild costs?");
-        buildingsLimit = scanner.nextInt();
-        System.out.println();
+        System.out.println("Do you need to insure your building?");
+        String buildingsPreConversion = scanner.nextLine();
+        buildingsInd = Refactored.validatedOutputToIndicator(buildingsPreConversion);
+        if (buildingsInd == 1) {
+            System.out.println("How much would you like to insure your home for, including rebuild costs?");
+            buildingsLimit = scanner.nextInt();
+            System.out.println();
+        } else {
+            System.out.println();
+        }
     }
 
     public static void propertyDetailsCaptureContentsLimit() {
-        System.out.println("How much would you like to insure the contents in your home for?");
-        contentsLimit = scanner.nextInt();
-        System.out.println();
+        System.out.println("Do you need to insure your building?");
+        String contentsPreConversion = scanner.nextLine();
+        contentsInd = Refactored.validatedOutputToIndicator(contentsPreConversion);
+        if (contentsInd == 1) {
+            System.out.println("""
+                    How much would you like to insure the contents in your home for?
+                    """);
+            contentsLimit = scanner.nextInt();
+            System.out.println();
+        } else {
+            System.out.println();
+        }
     }
 
     public static void propertyDetailsCaptureClaimsIndicator() {
@@ -259,6 +281,18 @@ public class Refactored {
 
     public static void propertyDetailsCaptureSummary() throws InterruptedException {
         //Property Recap, Menu and Edit
+        String buildingsTemp;
+        if (buildingsInd == 0) {
+            buildingsTemp = "You do not need to insure your building.";
+        } else {
+            buildingsTemp = "You need to insure your building up to " + buildingsLimit + ".";
+        }
+        String contentsTemp;
+        if (contentsInd == 0) {
+            contentsTemp = "You do not need to insure your building.";
+        } else {
+            contentsTemp = "You need to insure your building up to " + contentsLimit + ".";
+        }
         String subsidenceTemp;
         if (subsidenceIndicator == 0) {
             subsidenceTemp = "You have never suffered subsidence.";
@@ -269,7 +303,7 @@ public class Refactored {
         if (claimsIndicator == 0) {
             claimsTemp = "You have not made any claims in the last 5 years.";
         } else {
-            claimsTemp = "You have made claim(s) in the last 5 years.";
+            claimsTemp = "You have made " + claimsVolume + " claims in the last 5 years.";
         }
         String smokersTemp;
         if (smokersIndicator == 0) {
@@ -279,14 +313,14 @@ public class Refactored {
         }
         System.out.printf("""
                 We have captured the following details:
-                Your home is worth %d and you would like to be insured up to a rebuild cost of %d.
-                Your contents will be insured up to %d.
+                Your home is worth %d.
                 %s
                 %s
-                You have made %d claims.
+                %s
+                %s
                 %s
                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                """, homeValue, buildingsLimit, contentsLimit, subsidenceTemp, claimsTemp, claimsVolume, smokersTemp);
+                """, homeValue, buildingsTemp, contentsTemp, subsidenceTemp, claimsTemp, smokersTemp);
         TimeUnit.SECONDS.sleep(3);
     }
 
@@ -366,8 +400,22 @@ public class Refactored {
         return truncated;
     }
 
-    public static void test() {
+    public static int manageRiskDoubleMin() {
         //Price
+        combinedInd = buildingsInd + contentsInd;
+        if (combinedInd != 0) {
+            if (combinedInd == 2) {
+                return (int) anchorMinCombinedPremium;
+            } else if (buildingsInd == 1 && contentsInd == 0) {
+                return (int) anchorMinBuildingsOnlyPremium;
+            } else if (contentsInd == 1 && buildingsInd == 0) {
+                return (int) anchorMinContentsOnlyPremium;
+            } else
+                return (int) -1;
+        } else {
+            // change to loop to include buildings & contents limit capture
+            return (int) -1;
+        }
     }
 
     //Business Rules
@@ -435,9 +483,11 @@ public class Refactored {
 
         inputString = inputString.toLowerCase();// Error handles for mismatched case
         // Validates user input is acceptable value
-        while (!(inputString.equals("yes") || inputString.equals("no") || inputString.equals("n") || inputString.equals("y"))) {
-            System.out.printf("%s is not a valid input.\n", inputString);
-            System.out.println("Acceptable values are Y or N");
+        while (!(inputString.equals("y") || inputString.equals("n") || inputString.equals("no") || inputString.equals("yes"))) {
+            System.out.printf("""
+                    %s is not a valid input.
+                    Acceptable values are Y or N.
+                    """, inputString);
             inputString = scanner.nextLine();
             inputString = inputString.toLowerCase();
         }
