@@ -92,7 +92,11 @@ public class Refactored {
         //Quote or Decline based on user inputs
         //Decline and End check. "Business Rules" validation step.
         Refactored.preKickOutDoubleCheck();
+        Refactored.setCombinedInd();
+        Refactored.validateCombinedInd();
+
         //Continue to Quote
+
 
         //End of Journey
         System.out.println("The programme will exit now. Goodbye!");
@@ -384,10 +388,26 @@ public class Refactored {
     }
 
     // Pricing generation
-    public static double generateRiskDouble(int min, int max) {
+    public static double generateRiskDouble() {
         // AKA getRandomDouble_Between
-        double generate = ((Math.random() * (max - min)) + min);
+        double max = anchorMaxPremium;
+        double min;
+        double generate = 0.00;
         double truncated;
+
+        if (combinedInd == 2) {
+            min = anchorMinCombinedPremium;
+        } else if (buildingsInd == 1) {
+            min = anchorMinBuildingsOnlyPremium;
+        } else if (contentsInd == 1) {
+            min = anchorMinContentsOnlyPremium;
+        } else {
+            min = anchorMinContentsOnlyPremium; //Business Rule for Min Min premium
+        }
+
+        if (anchorRiskDouble != 0.00) {
+            generate = ((Math.random() * (max - min)) + min);
+        }// fix this
 
         if (anchorRiskDouble == 0.00) {
             if (generate >= 0) { //multiplication by 100 maintains 2 decimal place numbers. Subsequent division restores it as a double.
@@ -400,22 +420,33 @@ public class Refactored {
         return truncated;
     }
 
-    public static int manageRiskDoubleMin() {
-        //Price
+    public static void setCombinedInd() {
         combinedInd = buildingsInd + contentsInd;
-        if (combinedInd != 0) {
-            if (combinedInd == 2) {
-                return (int) anchorMinCombinedPremium;
-            } else if (buildingsInd == 1 && contentsInd == 0) {
-                return (int) anchorMinBuildingsOnlyPremium;
-            } else if (contentsInd == 1 && buildingsInd == 0) {
-                return (int) anchorMinContentsOnlyPremium;
-            } else
-                return (int) -1;
-        } else {
-            // change to loop to include buildings & contents limit capture
-            return (int) -1;
+    }
+
+    public static int validateCombinedInd() {
+        //Price
+        while (combinedInd == 0) {
+            System.out.println("""
+                    You have told us that you:
+                    DO NOT need cover for either of your buildings or contents.
+                    Is that correct?
+                    Confirm (Y/N).
+                    """);
+            String preValidate = scanner.nextLine();
+            if (Refactored.validatedOutputToIndicator(preValidate) == 1) {
+                combinedInd = -1;
+                Refactored.kickOutAction();
+            } else {
+                System.out.println("""
+                        Ok, we will re-ask both questions to collect the correct data.
+                        """);
+                Refactored.propertyDetailsCaptureBuildingsLimit();
+                Refactored.propertyDetailsCaptureContentsLimit();
+                Refactored.setCombinedInd();
+            }
         }
+        return combinedInd;
     }
 
     //Business Rules
