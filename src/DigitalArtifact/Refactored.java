@@ -96,14 +96,15 @@ public class Refactored {
         Refactored.validateCombinedInd();
 
         //Continue to Quote
-
+        Refactored.pricingAlgo();
+        // 3rd menu for accept, change property, change personal, exit, save???
 
         //End of Journey
         System.out.println("The programme will exit now. Goodbye!");
         scanner.close();
     }
 
-    //Customer Detail Capture
+    // Customer Detail Capture \\
     public static void personalDetailsCaptureFirstName() {
         System.out.println("What is your first name?");
         firstName = scanner.nextLine();
@@ -134,7 +135,7 @@ public class Refactored {
         System.out.println();
     }
 
-    // Customer Recap, Menu and Edit
+    // Customer Recap, Menu and Edit \\
     public static void personalDetailsCaptureSummary() throws InterruptedException {
         System.out.printf("""
                 We have captured the following details:
@@ -205,7 +206,7 @@ public class Refactored {
         }
     }
 
-    // Property Detail Capture
+    // Property Detail Capture \\
     public static void propertyDetailsCaptureHomeValue() {
         System.out.println("What is the current value of your home?");
         homeValue = scanner.nextInt();
@@ -283,6 +284,7 @@ public class Refactored {
         System.out.println();
     }
 
+    // Property Recap, Menu and Edit \\
     public static void propertyDetailsCaptureSummary() throws InterruptedException {
         //Property Recap, Menu and Edit
         String buildingsTemp;
@@ -387,44 +389,74 @@ public class Refactored {
         }
     }
 
-    // Pricing generation
-    public static double generateRiskDouble() {
+    // Pricing generation \\
+    public static void generateRiskDouble() {
+        //Create permanent value to represent "core risk premium". Modifiers will update this value.
         // AKA getRandomDouble_Between
         double max = anchorMaxPremium;
         double min;
         double generate = 0.00;
         double truncated;
 
-        if (combinedInd == 2) {
-            min = anchorMinCombinedPremium;
-        } else if (buildingsInd == 1) {
-            min = anchorMinBuildingsOnlyPremium;
-        } else if (contentsInd == 1) {
-            min = anchorMinContentsOnlyPremium;
-        } else {
-            min = anchorMinContentsOnlyPremium; //Business Rule for Min Min premium
-        }
-
         if (anchorRiskDouble != 0.00) {
-            generate = ((Math.random() * (max - min)) + min);
-        }// fix this
+            if (combinedInd == 2) {
+                min = anchorMinCombinedPremium;
+            } else if (buildingsInd == 1) {
+                //Removed extra step, computation not required. (buildingsInd == 1 && contentsInd == 0)
+                min = anchorMinBuildingsOnlyPremium;
+            } else if (contentsInd == 1) {
+                //Removed extra step, computation not required. (contentsInd == 1 && buildingsInd == 0)
+                min = anchorMinContentsOnlyPremium;
+            } else {
+                min = anchorMinContentsOnlyPremium; //Business Rule for Min Min premium
+            }
 
-        if (anchorRiskDouble == 0.00) {
+            generate = ((Math.random() * (max - min)) + min);
             if (generate >= 0) { //multiplication by 100 maintains 2 decimal place numbers. Subsequent division restores it as a double.
                 truncated = Math.floor(generate * 100) / 100; //Rounds down to whole integer closer to 0
             } else {
                 truncated = Math.ceil(generate * 100) / 100; //Rounds up to whole integer closer to 0
             }
-        } else
-            truncated = anchorRiskDouble; //Step stores the 1st value determined for re-use. In case of detail updates which change modifiers. Otherwise price will go all over the place.
-        return truncated;
+            anchorRiskDouble = truncated; //Step stores the 1st value determined for re-use. In case of detail updates which change modifiers. Otherwise price will go all over the place.
+        }
+
+
+    }
+// INCOMPLETE *********************************************************************
+    public static void pricingAlgo() {
+        //Modify core risk premium that is fixed for customer quote.About which the selection modifiers adjust final price.
+        Refactored.generateRiskDouble();
+        double buildLimitMod = 0.00;
+        double contLimitMod = 0.00;
+
+        if (buildingsLimit > 0 && buildingsLimit < 250000) {
+            buildLimitMod = 1;
+        } else if (buildingsLimit >= 250000 && buildingsLimit < 750000) {
+            buildLimitMod = 1.1;
+        } else if (buildingsLimit >= 750000 && buildingsLimit < 1250000) {
+            buildLimitMod = 1.3;
+        }
+
+        if (contentsLimit > 0 && contentsLimit < 30000) {
+            contLimitMod = 1;
+        } else if (buildingsLimit >= 30000 && buildingsLimit < 55000) {
+            contLimitMod = 1.15;
+        } else if (buildingsLimit >= 55000 && buildingsLimit < 100000) {
+            contLimitMod = 1.4;
+        }
+
+        double buildLimitPrice = ((anchorRiskDouble * buildLimitMod) - anchorRiskDouble);
+        double contLimitPrice = ((anchorRiskDouble * contLimitMod) - anchorRiskDouble);
+
+        customerPrice = anchorRiskDouble + buildLimitPrice + contLimitPrice;
     }
 
+    // Validations \\
     public static void setCombinedInd() {
         combinedInd = buildingsInd + contentsInd;
     }
 
-    public static int validateCombinedInd() {
+    public static void validateCombinedInd() {
         //Price
         while (combinedInd == 0) {
             System.out.println("""
@@ -446,10 +478,9 @@ public class Refactored {
                 Refactored.setCombinedInd();
             }
         }
-        return combinedInd;
     }
 
-    //Business Rules
+    //Business Rules \\
     public static void preKickOutDoubleCheck() {
         //Decline and End
         if (subsidenceIndicator == 1 || claimsVolume >= 3) {
@@ -486,7 +517,7 @@ public class Refactored {
                 String preValidate = scanner.nextLine();
                 if (Refactored.validatedOutputToIndicator(preValidate) == 1) {
                     Refactored.kickOutAction();
-                }//if1
+                }
             }
         }
     }
@@ -501,11 +532,12 @@ public class Refactored {
         System.exit(0); //End Programme
     }
 
-    public static int generateRiskInt(int min, int max) {
+
+    /*public static int generateRiskInt(int min, int max) {
         // AKA getRandomInt_Between
         double generate = ((Math.random() * (max - min)) + min);
         return (int) generate;
-    }
+    }*/
 
     public static int validatedOutputToIndicator(String inputString) {
         // Validation -- Forces valid input and Converts Y/N to 1/0
