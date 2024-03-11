@@ -39,6 +39,8 @@ public class Refactored {
     public static double anchorMinCombinedPremium = 120.00; //Business Rule - 0.8 modifier for combined
     public static double anchorMaxPremium = 1200.00; //Business Rule
     public static double customerPrice = 0.00;
+    public static boolean personalDetailsCycleOnce = false;
+    public static boolean propertyDetailsCycleOnce = false;
 
 
     public static void main(String[] args) throws InterruptedException {
@@ -55,14 +57,16 @@ public class Refactored {
 
         //Menu Selection via switch statement
         Refactored.personalDetailsCaptureSummary();
+        personalDetailsCycleOnce = true;
         TimeUnit.SECONDS.sleep(3);
         do {
             Refactored.customerDetailsEditMenu();
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.SECONDS.sleep(2);
             Refactored.customerDetailsEditSelector();
-            TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(1);
             Refactored.personalDetailsCaptureSummary();
         } while (menuOption != 7);
+        Refactored.scannerFlush();
 
         //Transitional Message
         System.out.printf("""
@@ -80,6 +84,7 @@ public class Refactored {
 
         //Menu Selection via switch statement
         Refactored.propertyDetailsCaptureSummary();
+        propertyDetailsCycleOnce = true;
         TimeUnit.SECONDS.sleep(3);
         do {
             Refactored.propertyDetailsEditMenu();
@@ -88,6 +93,7 @@ public class Refactored {
             TimeUnit.SECONDS.sleep(3);
             Refactored.propertyDetailsCaptureSummary();
         } while (menuOption != 7);
+        Refactored.scannerFlush();
 
         //Quote or Decline based on user inputs
         //Decline and End check. "Business Rules" validation step.
@@ -97,6 +103,7 @@ public class Refactored {
 
         //Continue to Quote
         Refactored.pricingAlgo();
+        System.out.printf("The price we can offer is %f", customerPrice);
         // 3rd menu for accept, change property, change personal, exit, save???
 
         //End of Journey
@@ -130,8 +137,11 @@ public class Refactored {
     }
 
     public static void personalDetailsCaptureYearsAtAddress() {
-        System.out.printf("How many years have you lived at %s, %s?\n", addressFirstLine, addressPostCode);
+        System.out.printf("""
+                How many years have you lived at %s, %s?
+                """, addressFirstLine, addressPostCode);
         yearsAtAddress = scanner.nextInt();
+        //Refactored.scannerFlush();
         System.out.println();
     }
 
@@ -169,6 +179,7 @@ public class Refactored {
             //Adding Do While loop to accept valid actions only
             System.out.println("Enter a number from those on screen to continue.");
             menuOption = scanner.nextInt();
+            Refactored.scannerFlush();
             System.out.println();
             if (!(menuOption > 0 && menuOption < 8)) {
                 System.out.printf("%d is not a valid input.\n", menuOption);
@@ -177,23 +188,23 @@ public class Refactored {
         //Menu Selection
         switch (menuOption) {
             case 1:
-                scanner.nextLine();
+                Refactored.scannerFlush();
                 Refactored.personalDetailsCaptureFirstName();
                 break;
             case 2:
-                scanner.nextLine();
+                Refactored.scannerFlush();
                 Refactored.personalDetailsCaptureSurname();
                 break;
             case 3:
-                scanner.nextLine();
+                Refactored.scannerFlush();
                 Refactored.personalDetailsCaptureFirstLine();
                 break;
             case 4:
-                scanner.nextLine();
+                Refactored.scannerFlush();
                 Refactored.personalDetailsCapturePostCode();
                 break;
             case 5:
-                scanner.nextLine();
+                Refactored.scannerFlush();
                 Refactored.personalDetailsCaptureYearsAtAddress();
                 break;
             case 6:
@@ -202,24 +213,50 @@ public class Refactored {
                         """, firstName);
                 break;
             case 7:
+                Refactored.scannerFlush();
                 break;
         }
     }
 
     // Property Detail Capture \\
     public static void propertyDetailsCaptureHomeValue() {
-        System.out.println("What is the current value of your home?");
-        homeValue = scanner.nextInt();
+        int inRangeInd = 0;
+        while (homeValue < 50000 || homeValue > 2000000) {
+            System.out.println(""" 
+                    We only insure homes with a value between 50 thousand and 2 million.
+                    Is your property valued in this range?
+                    (Y/N)
+                    """);
+            Refactored.scannerFlush();
+            String valuePreConversion = scanner.nextLine();
+            inRangeInd = Refactored.validatedOutputToIndicator(valuePreConversion);
+            if (inRangeInd == 1) {
+                Refactored.kickOutAction();
+                System.out.println("""
+                        What is the current value of your home?
+                        We only insure homes with a value between 50 thousand and 2 million.
+                        """);
+                homeValue = scanner.nextInt();
+                Refactored.scannerFlush();
+            }
+
+        }
         System.out.println();
     }
 
     public static void propertyDetailsCaptureBuildingsLimit() {
-        System.out.println("Do you need to insure your building?");
+        System.out.println("""
+                Do you need to insure your building?
+                (Y/N)
+                """);
+        Refactored.scannerFlush();
         String buildingsPreConversion = scanner.nextLine();
         buildingsInd = Refactored.validatedOutputToIndicator(buildingsPreConversion);
         if (buildingsInd == 1) {
             System.out.println("How much would you like to insure your home for, including rebuild costs?");
             buildingsLimit = scanner.nextInt();
+            //Iteration: added if statement and new variable to ensure this step is run 1st time as its required, on subsequent runs - not needed
+            Refactored.scannerFlush();
             System.out.println();
         } else {
             System.out.println();
@@ -227,7 +264,11 @@ public class Refactored {
     }
 
     public static void propertyDetailsCaptureContentsLimit() {
-        System.out.println("Do you need to insure your building?");
+        System.out.println("""
+                Do you need to insure your contents?
+                (Y/N)
+                """);
+        Refactored.scannerFlush();
         String contentsPreConversion = scanner.nextLine();
         contentsInd = Refactored.validatedOutputToIndicator(contentsPreConversion);
         if (contentsInd == 1) {
@@ -235,6 +276,7 @@ public class Refactored {
                     How much would you like to insure the contents in your home for?
                     """);
             contentsLimit = scanner.nextInt();
+            Refactored.scannerFlush();
             System.out.println();
         } else {
             System.out.println();
@@ -258,8 +300,12 @@ public class Refactored {
 
     public static void propertyDetailsCaptureClaimsVolume() {
         System.out.println("How many home insurance claims have you made in the last 5 years?");
-        scanner.nextLine();
+        //
+        //if (propertyDetailsCycleOnce == false) {
+
+        //}
         claimsVolume = scanner.nextInt();
+        Refactored.scannerFlush();
         System.out.println();
     }
 
@@ -268,8 +314,12 @@ public class Refactored {
                 Have you ever made a claim for subsidence whilst living at %s, %s?
                 Confirm (Y/N)
                 """, addressFirstLine, addressPostCode);
-        scanner.nextLine();
+        // Iteration: added if statement and new variable to ensure this step is run 1st time as its required, on subsequent runs - not needed
+        //if (propertyDetailsCycleOnce == false) {
+
+        //}
         String subsidencePreConversion = scanner.nextLine();
+        Refactored.scannerFlush();
         subsidenceIndicator = Refactored.validatedOutputToIndicator(subsidencePreConversion);
         System.out.println();
     }
@@ -350,6 +400,7 @@ public class Refactored {
             //Adding Do While loop to accept valid actions only
             System.out.println("Enter a number from those on screen to continue.");
             menuOption = scanner.nextInt();
+            Refactored.scannerFlush();
             System.out.println();
             if (!(menuOption > 0 && menuOption < 8)) {
                 System.out.printf("""
@@ -361,27 +412,27 @@ public class Refactored {
         switch (menuOption) {
             //Run a specific Method dependent on what the user selection
             case 1:
-                scanner.nextLine();
+                Refactored.scannerFlush();
                 Refactored.propertyDetailsCaptureHomeValue();
                 break;
             case 2:
-                scanner.nextLine();
+                Refactored.scannerFlush();
                 Refactored.propertyDetailsCaptureBuildingsLimit();
                 break;
             case 3:
-                scanner.nextLine();
+                Refactored.scannerFlush();
                 Refactored.propertyDetailsCaptureContentsLimit();
                 break;
             case 4:
-                scanner.nextLine();
+                Refactored.scannerFlush();
                 Refactored.propertyDetailsCaptureSubsidenceIndicator();
                 break;
             case 5:
-                scanner.nextLine();
+                Refactored.scannerFlush();
                 Refactored.propertyDetailsCaptureClaimsIndicator();
                 break;
             case 6:
-                scanner.nextLine();
+                Refactored.scannerFlush();
                 Refactored.propertyDetailsCaptureSmokersIndicator();
                 break;
             case 7:
@@ -422,33 +473,63 @@ public class Refactored {
 
 
     }
-// INCOMPLETE *********************************************************************
+
+    // INCOMPLETE *********************************************************************
     public static void pricingAlgo() {
         //Modify core risk premium that is fixed for customer quote.About which the selection modifiers adjust final price.
         Refactored.generateRiskDouble();
         double buildLimitMod = 0.00;
         double contLimitMod = 0.00;
+        double homeValueMod = 0.00;
+        double claimsVolumeMod = 0.00;
+        double smokersIndMod = 0.00;
 
         if (buildingsLimit > 0 && buildingsLimit < 250000) {
-            buildLimitMod = 1;
+            buildLimitMod = 0.0;
         } else if (buildingsLimit >= 250000 && buildingsLimit < 750000) {
-            buildLimitMod = 1.1;
+            buildLimitMod = 0.2;
         } else if (buildingsLimit >= 750000 && buildingsLimit < 1250000) {
-            buildLimitMod = 1.3;
+            buildLimitMod = 0.8;
         }
 
         if (contentsLimit > 0 && contentsLimit < 30000) {
-            contLimitMod = 1;
-        } else if (buildingsLimit >= 30000 && buildingsLimit < 55000) {
-            contLimitMod = 1.15;
-        } else if (buildingsLimit >= 55000 && buildingsLimit < 100000) {
+            contLimitMod = 0.0;
+        } else if (contentsLimit >= 30000 && contentsLimit < 55000) {
+            contLimitMod = 0.2;
+        } else if (contentsLimit >= 55000 && contentsLimit < 100000) {
             contLimitMod = 1.4;
+        }
+
+        if (homeValue > 0 && homeValue < 300000) {
+            homeValueMod = 1;
+        } else if (homeValue >= 300000 && homeValue < 650000) {
+            homeValueMod = 1.1;
+        } else if (homeValue >= 650000 && homeValue < 1250000) {
+            homeValueMod = 1.3;
+        }
+
+        if (claimsIndicator == 0) {
+            claimsVolumeMod = 0.0;
+        } else if (claimsVolume == 1) {
+            claimsVolumeMod = 0.4;
+        } else if (claimsVolume >= 2 && claimsVolume >= 2) {
+            claimsVolumeMod = 2.0;
+        }
+
+        if (smokersIndicator == 0) {
+            smokersIndMod = 0.0;
+        } else if (smokersIndicator > 0) {
+            smokersIndMod = 0.6;
         }
 
         double buildLimitPrice = ((anchorRiskDouble * buildLimitMod) - anchorRiskDouble);
         double contLimitPrice = ((anchorRiskDouble * contLimitMod) - anchorRiskDouble);
+        double homeValuePrice = ((anchorRiskDouble * homeValueMod) - anchorRiskDouble);
+        double claimsVolumePrice = ((anchorRiskDouble * claimsVolumeMod) - anchorRiskDouble);
+        double smokersIndPrice = ((anchorRiskDouble * smokersIndMod) - anchorRiskDouble);
 
-        customerPrice = anchorRiskDouble + buildLimitPrice + contLimitPrice;
+
+        customerPrice = anchorRiskDouble + buildLimitPrice + contLimitPrice + homeValuePrice + claimsVolumePrice + smokersIndPrice;
     }
 
     // Validations \\
@@ -548,7 +629,7 @@ public class Refactored {
         // Validates user input is acceptable value
         while (!(inputString.equals("y") || inputString.equals("n") || inputString.equals("no") || inputString.equals("yes"))) {
             System.out.printf("""
-                    %s is not a valid input.
+                    "%s" is not a valid input.
                     Acceptable values are Y or N.
                     """, inputString);
             inputString = scanner.nextLine();
@@ -561,5 +642,11 @@ public class Refactored {
             generatedIndicator = 0;
         }
         return generatedIndicator;
+    }
+
+    public static void scannerFlush(){
+        while (scanner.hasNextLine()) {
+            scanner.nextLine();
+        }
     }
 }
