@@ -16,13 +16,7 @@ What methods will you provide on the collected data? -- Methods to confirm:
 
 public class Main {
 
-    public static Scanner scanner = new Scanner(System.in);
-    public static String firstName = "";
-    public static String surname = "";
-    public static String addressFirstLine = "";
-    public static String addressPostCode = "";
-    public static int yearsAtAddress = 0;
-    public static int menuOption = 0;
+
     public static int buildingsLimit = 0;
     public static int buildingsInd = 0;
     public static int homeValue = 0;
@@ -58,12 +52,12 @@ public class Main {
         //Menu Selection via switch statement
         Main.personalDetailsCaptureSummary();
         personalDetailsCycleOnce = true;
-        TimeUnit.SECONDS.sleep(3);
+        //TimeUnit.SECONDS.sleep(3);
         do {
             Main.customerDetailsEditMenu();
-            TimeUnit.SECONDS.sleep(2);
+            //TimeUnit.SECONDS.sleep(2);
             Main.customerDetailsEditSelector();
-            TimeUnit.SECONDS.sleep(1);
+            //TimeUnit.SECONDS.sleep(1);
             Main.personalDetailsCaptureSummary();
         } while (menuOption != 7);
         Main.scannerFlush();
@@ -85,12 +79,12 @@ public class Main {
         //Menu Selection via switch statement
         Main.propertyDetailsCaptureSummary();
         propertyDetailsCycleOnce = true;
-        TimeUnit.SECONDS.sleep(3);
+        //TimeUnit.SECONDS.sleep(3);
         do {
             Main.propertyDetailsEditMenu();
-            TimeUnit.SECONDS.sleep(1);
+            //TimeUnit.SECONDS.sleep(1);
             Main.propertyDetailsEditSelector();
-            TimeUnit.SECONDS.sleep(3);
+            //TimeUnit.SECONDS.sleep(3);
             Main.propertyDetailsCaptureSummary();
         } while (menuOption != 7);
         Main.scannerFlush();
@@ -111,112 +105,6 @@ public class Main {
         scanner.close();
     }
 
-    // Customer Detail Capture \\
-    public static void personalDetailsCaptureFirstName() {
-        System.out.println("What is your first name?");
-        firstName = scanner.nextLine();
-        System.out.println();
-    }
-
-    public static void personalDetailsCaptureSurname() {
-        System.out.println("What is your surname?");
-        surname = scanner.nextLine();
-        System.out.println();
-    }
-
-    public static void personalDetailsCaptureFirstLine() {
-        System.out.println("What is the first line of your address?");
-        addressFirstLine = scanner.nextLine();
-        System.out.println();
-    }
-
-    public static void personalDetailsCapturePostCode() {
-        System.out.println("What is the postcode of your address?");
-        addressPostCode = scanner.nextLine();
-        System.out.println();
-    }
-
-    public static void personalDetailsCaptureYearsAtAddress() {
-        System.out.printf("""
-                How many years have you lived at %s, %s?
-                """, addressFirstLine, addressPostCode);
-        yearsAtAddress = scanner.nextInt();
-        //RemovingRepetition.scannerFlush();
-        System.out.println();
-    }
-
-    // Customer Recap, Menu and Edit \\
-    public static void personalDetailsCaptureSummary() throws InterruptedException {
-        System.out.printf("""
-                We have captured the following details:
-                Your name is %s %s.
-                You live at %s, %s
-                You have been there for %d years.
-                                
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-                """, firstName, surname, addressFirstLine, addressPostCode, yearsAtAddress);
-        TimeUnit.SECONDS.sleep(3);
-    }
-
-    public static void customerDetailsEditMenu() {
-        // Considered individual options for first and surnames and address fields.
-        // Made menu too long for user. Could consider inner loop to offer updating one, both, neither.
-        System.out.println("""
-                Review the above details. If any are incorrect you can amend via the following options:
-                Option 1: Amend your first name
-                Option 2: Amend your surname
-                Option 3: Amend your address - first line
-                Option 4: Amend your address - postcode
-                Option 5: Amend how many years you have lived at your home
-                Option 6: Hear some personalised words of encouragement
-                Option 7: Enter the quote process
-                """);
-    }
-
-    public static void customerDetailsEditSelector() {
-
-        do {
-            //Adding Do While loop to accept valid actions only
-            System.out.println("Enter a number from those on screen to continue.");
-            menuOption = scanner.nextInt();
-            Main.scannerFlush();
-            System.out.println();
-            if (!(menuOption > 0 && menuOption < 8)) {
-                System.out.printf("%d is not a valid input.\n", menuOption);
-            }
-        } while (!(menuOption > 0 && menuOption < 8));
-        //Menu Selection
-        switch (menuOption) {
-            case 1:
-                Main.scannerFlush();
-                Main.personalDetailsCaptureFirstName();
-                break;
-            case 2:
-                Main.scannerFlush();
-                Main.personalDetailsCaptureSurname();
-                break;
-            case 3:
-                Main.scannerFlush();
-                Main.personalDetailsCaptureFirstLine();
-                break;
-            case 4:
-                Main.scannerFlush();
-                Main.personalDetailsCapturePostCode();
-                break;
-            case 5:
-                Main.scannerFlush();
-                Main.personalDetailsCaptureYearsAtAddress();
-                break;
-            case 6:
-                System.out.printf("""
-                        %s, you can sleep when you are dead, which isn't yet.
-                        """, firstName);
-                break;
-            case 7:
-                Main.scannerFlush();
-                break;
-        }
-    }
 
     // Property Detail Capture \\
     public static void propertyDetailsCaptureHomeValue() {
@@ -377,7 +265,7 @@ public class Main {
                 %s
                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                 """, homeValue, buildingsTemp, contentsTemp, subsidenceTemp, claimsTemp, smokersTemp);
-        TimeUnit.SECONDS.sleep(3);
+        //TimeUnit.SECONDS.sleep(3);
     }
 
     public static void propertyDetailsEditMenu() {
@@ -532,87 +420,6 @@ public class Main {
         customerPrice = anchorRiskDouble + buildLimitPrice + contLimitPrice + homeValuePrice + claimsVolumePrice + smokersIndPrice;
     }
 
-    // Validations \\
-    public static void setCombinedInd() {
-        combinedInd = buildingsInd + contentsInd;
-    }
-
-    public static void validateCombinedInd() {
-        //Price
-        while (combinedInd == 0) {
-            System.out.println("""
-                    You have told us that you:
-                    DO NOT need cover for either of your buildings or contents.
-                    Is that correct?
-                    Confirm (Y/N).
-                    """);
-            String preValidate = scanner.nextLine();
-            if (Main.validatedOutputToIndicator(preValidate) == 1) {
-                combinedInd = -1;
-                Main.kickOutAction();
-            } else {
-                System.out.println("""
-                        Ok, we will re-ask both questions to collect the correct data.
-                        """);
-                Main.propertyDetailsCaptureBuildingsLimit();
-                Main.propertyDetailsCaptureContentsLimit();
-                Main.setCombinedInd();
-            }
-        }
-    }
-
-    //Business Rules \\
-    public static void preKickOutDoubleCheck() {
-        //Decline and End
-        if (subsidenceIndicator == 1 || claimsVolume >= 3) {
-            //Individual message presented dependent on factors captured from user.
-            if (subsidenceIndicator == 1 && claimsVolume < 3) {
-                System.out.printf("""
-                        Please can we confirm that:
-                        - You have previously suffered subsidence whilst living at:
-                        %s, %s
-                        Confirm (Y/N)
-                        """, addressFirstLine, addressPostCode);
-                String preValidate = scanner.nextLine();
-                if (Main.validatedOutputToIndicator(preValidate) == 1) {
-                    Main.kickOutAction();
-                }
-            } else if (subsidenceIndicator == 0 && claimsVolume >= 3) {
-                System.out.println("""
-                        Please can we confirm that:
-                        - You have previously made 3 or more home insurance claims
-                        Confirm (Y/N)
-                        """);
-                String preValidate = scanner.nextLine();
-                if (Main.validatedOutputToIndicator(preValidate) == 1) {
-                    Main.kickOutAction();
-                }
-            } else {
-                System.out.printf("""
-                        Please can we confirm that:
-                        - You have previously made 3 or more home insurance claims
-                        - You have previously suffered subsidence whilst living at:
-                        %s, %s
-                        Confirm (Y/N)
-                        """, addressFirstLine, addressPostCode);
-                String preValidate = scanner.nextLine();
-                if (Main.validatedOutputToIndicator(preValidate) == 1) {
-                    Main.kickOutAction();
-                }
-            }
-        }
-    }
-
-    public static void kickOutAction() {
-        //Used to end the programme. Usually due to being outside simulated "business" rules.
-        System.out.printf("""
-                We are really sorry %s, we are unable to provide you a quote at this time.
-                We hope you find alternative arrangements for %s, %s.
-                Please consider us again in the future.
-                """, firstName, addressFirstLine, addressPostCode);
-        System.exit(0); //End Programme
-    }
-
 
     /*public static int generateRiskInt(int min, int max) {
         // AKA getRandomInt_Between
@@ -620,33 +427,4 @@ public class Main {
         return (int) generate;
     }*/
 
-    public static int validatedOutputToIndicator(String inputString) {
-        // Validation -- Forces valid input and Converts Y/N to 1/0
-        char inputChar;
-        int generatedIndicator;
-
-        inputString = inputString.toLowerCase();// Error handles for mismatched case
-        // Validates user input is acceptable value
-        while (!(inputString.equals("y") || inputString.equals("n") || inputString.equals("no") || inputString.equals("yes"))) {
-            System.out.printf("""
-                    "%s" is not a valid input.
-                    Acceptable values are Y or N.
-                    """, inputString);
-            inputString = scanner.nextLine();
-            inputString = inputString.toLowerCase();
-        }
-        inputChar = inputString.charAt(0);
-        if (inputChar == 'y') {
-            generatedIndicator = 1;
-        } else {
-            generatedIndicator = 0;
-        }
-        return generatedIndicator;
-    }
-
-    public static void scannerFlush(){
-        while (scanner.hasNextLine()) {
-            scanner.nextLine();
-        }
-    }
 }
