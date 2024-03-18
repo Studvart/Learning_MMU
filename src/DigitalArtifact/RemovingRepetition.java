@@ -14,7 +14,7 @@ What methods will you provide on the collected data? -- Methods to confirm:
  - pricing based on collected factors
 */
 
-public class Refactored {
+public class RemovingRepetition {
 
     public static Scanner scanner = new Scanner(System.in);
     public static String firstName = "";
@@ -49,24 +49,24 @@ public class Refactored {
                 """);
 
         // Collection methods. Reusable if details incorrect.
-        Refactored.personalDetailsCaptureFirstName();
-        Refactored.personalDetailsCaptureSurname();
-        Refactored.personalDetailsCaptureFirstLine();
-        Refactored.personalDetailsCapturePostCode();
-        Refactored.personalDetailsCaptureYearsAtAddress();
+        RemovingRepetition.personalDetailsCaptureFirstName();
+        RemovingRepetition.personalDetailsCaptureSurname();
+        RemovingRepetition.personalDetailsCaptureFirstLine();
+        RemovingRepetition.personalDetailsCapturePostCode();
+        RemovingRepetition.personalDetailsCaptureYearsAtAddress();
 
         //Menu Selection via switch statement
-        Refactored.personalDetailsCaptureSummary();
+        RemovingRepetition.personalDetailsCaptureSummary();
         personalDetailsCycleOnce = true;
         TimeUnit.SECONDS.sleep(3);
         do {
-            Refactored.customerDetailsEditMenu();
+            RemovingRepetition.customerDetailsEditMenu();
             TimeUnit.SECONDS.sleep(2);
-            Refactored.customerDetailsEditSelector();
+            RemovingRepetition.customerDetailsEditSelector();
             TimeUnit.SECONDS.sleep(1);
-            Refactored.personalDetailsCaptureSummary();
+            RemovingRepetition.personalDetailsCaptureSummary();
         } while (menuOption != 7);
-        Refactored.scannerFlush();
+        RemovingRepetition.scannerFlush();
 
         //Transitional Message
         System.out.printf("""
@@ -75,34 +75,34 @@ public class Refactored {
                 """, firstName, addressFirstLine, addressPostCode);
 
         // Collection methods. Reusable if details incorrect.
-        Refactored.propertyDetailsCaptureHomeValue();
-        Refactored.propertyDetailsCaptureBuildingsLimit();
-        Refactored.propertyDetailsCaptureContentsLimit();
-        Refactored.propertyDetailsCaptureSubsidenceIndicator();
-        Refactored.propertyDetailsCaptureClaimsIndicator();
-        Refactored.propertyDetailsCaptureSmokersIndicator();
+        RemovingRepetition.propertyDetailsCaptureHomeValue();
+        RemovingRepetition.propertyDetailsCaptureBuildingsLimit();
+        RemovingRepetition.propertyDetailsCaptureContentsLimit();
+        RemovingRepetition.propertyDetailsCaptureSubsidenceIndicator();
+        RemovingRepetition.propertyDetailsCaptureClaimsIndicator();
+        RemovingRepetition.propertyDetailsCaptureSmokersIndicator();
 
         //Menu Selection via switch statement
-        Refactored.propertyDetailsCaptureSummary();
+        RemovingRepetition.propertyDetailsCaptureSummary();
         propertyDetailsCycleOnce = true;
         TimeUnit.SECONDS.sleep(3);
         do {
-            Refactored.propertyDetailsEditMenu();
+            RemovingRepetition.propertyDetailsEditMenu();
             TimeUnit.SECONDS.sleep(1);
-            Refactored.propertyDetailsEditSelector();
+            RemovingRepetition.propertyDetailsEditSelector();
             TimeUnit.SECONDS.sleep(3);
-            Refactored.propertyDetailsCaptureSummary();
+            RemovingRepetition.propertyDetailsCaptureSummary();
         } while (menuOption != 7);
-        Refactored.scannerFlush();
+        RemovingRepetition.scannerFlush();
 
         //Quote or Decline based on user inputs
         //Decline and End check. "Business Rules" validation step.
-        Refactored.preKickOutDoubleCheck();
-        Refactored.setCombinedInd();
-        Refactored.validateCombinedInd();
+        RemovingRepetition.preKickOutDoubleCheck();
+        RemovingRepetition.setCombinedInd();
+        RemovingRepetition.validateCombinedInd();
 
         //Continue to Quote
-        Refactored.pricingAlgo();
+        RemovingRepetition.pricingAlgo();
         System.out.printf("The price we can offer is %f", customerPrice);
         // 3rd menu for accept, change property, change personal, exit, save???
 
@@ -141,7 +141,7 @@ public class Refactored {
                 How many years have you lived at %s, %s?
                 """, addressFirstLine, addressPostCode);
         yearsAtAddress = scanner.nextInt();
-        //Refactored.scannerFlush();
+        //RemovingRepetition.scannerFlush();
         System.out.println();
     }
 
@@ -179,7 +179,7 @@ public class Refactored {
             //Adding Do While loop to accept valid actions only
             System.out.println("Enter a number from those on screen to continue.");
             menuOption = scanner.nextInt();
-            Refactored.scannerFlush();
+            RemovingRepetition.scannerFlush();
             System.out.println();
             if (!(menuOption > 0 && menuOption < 8)) {
                 System.out.printf("%d is not a valid input.\n", menuOption);
@@ -188,24 +188,24 @@ public class Refactored {
         //Menu Selection
         switch (menuOption) {
             case 1:
-                Refactored.scannerFlush();
-                Refactored.personalDetailsCaptureFirstName();
+                RemovingRepetition.scannerFlush();
+                RemovingRepetition.personalDetailsCaptureFirstName();
                 break;
             case 2:
-                Refactored.scannerFlush();
-                Refactored.personalDetailsCaptureSurname();
+                RemovingRepetition.scannerFlush();
+                RemovingRepetition.personalDetailsCaptureSurname();
                 break;
             case 3:
-                Refactored.scannerFlush();
-                Refactored.personalDetailsCaptureFirstLine();
+                RemovingRepetition.scannerFlush();
+                RemovingRepetition.personalDetailsCaptureFirstLine();
                 break;
             case 4:
-                Refactored.scannerFlush();
-                Refactored.personalDetailsCapturePostCode();
+                RemovingRepetition.scannerFlush();
+                RemovingRepetition.personalDetailsCapturePostCode();
                 break;
             case 5:
-                Refactored.scannerFlush();
-                Refactored.personalDetailsCaptureYearsAtAddress();
+                RemovingRepetition.scannerFlush();
+                RemovingRepetition.personalDetailsCaptureYearsAtAddress();
                 break;
             case 6:
                 System.out.printf("""
@@ -213,7 +213,7 @@ public class Refactored {
                         """, firstName);
                 break;
             case 7:
-                Refactored.scannerFlush();
+                RemovingRepetition.scannerFlush();
                 break;
         }
     }
@@ -227,17 +227,17 @@ public class Refactored {
                     Is your property valued in this range?
                     (Y/N)
                     """);
-            Refactored.scannerFlush();
+            RemovingRepetition.scannerFlush();
             String valuePreConversion = scanner.nextLine();
-            inRangeInd = Refactored.validatedOutputToIndicator(valuePreConversion);
+            inRangeInd = RemovingRepetition.validatedOutputToIndicator(valuePreConversion);
             if (inRangeInd == 1) {
-                Refactored.kickOutAction();
+                RemovingRepetition.kickOutAction();
                 System.out.println("""
                         What is the current value of your home?
                         We only insure homes with a value between 50 thousand and 2 million.
                         """);
                 homeValue = scanner.nextInt();
-                Refactored.scannerFlush();
+                RemovingRepetition.scannerFlush();
             }
 
         }
@@ -249,14 +249,14 @@ public class Refactored {
                 Do you need to insure your building?
                 (Y/N)
                 """);
-        Refactored.scannerFlush();
+        RemovingRepetition.scannerFlush();
         String buildingsPreConversion = scanner.nextLine();
-        buildingsInd = Refactored.validatedOutputToIndicator(buildingsPreConversion);
+        buildingsInd = RemovingRepetition.validatedOutputToIndicator(buildingsPreConversion);
         if (buildingsInd == 1) {
             System.out.println("How much would you like to insure your home for, including rebuild costs?");
             buildingsLimit = scanner.nextInt();
             //Iteration: added if statement and new variable to ensure this step is run 1st time as its required, on subsequent runs - not needed
-            Refactored.scannerFlush();
+            RemovingRepetition.scannerFlush();
             System.out.println();
         } else {
             System.out.println();
@@ -268,15 +268,15 @@ public class Refactored {
                 Do you need to insure your contents?
                 (Y/N)
                 """);
-        Refactored.scannerFlush();
+        RemovingRepetition.scannerFlush();
         String contentsPreConversion = scanner.nextLine();
-        contentsInd = Refactored.validatedOutputToIndicator(contentsPreConversion);
+        contentsInd = RemovingRepetition.validatedOutputToIndicator(contentsPreConversion);
         if (contentsInd == 1) {
             System.out.println("""
                     How much would you like to insure the contents in your home for?
                     """);
             contentsLimit = scanner.nextInt();
-            Refactored.scannerFlush();
+            RemovingRepetition.scannerFlush();
             System.out.println();
         } else {
             System.out.println();
@@ -288,10 +288,10 @@ public class Refactored {
                 Have you made any home insurance claims in the last 5 years?
                 Confirm (Y/N)""");
         String claimsPreConversion = scanner.nextLine();
-        claimsIndicator = Refactored.validatedOutputToIndicator(claimsPreConversion);
+        claimsIndicator = RemovingRepetition.validatedOutputToIndicator(claimsPreConversion);
         if (claimsIndicator != 0) {
             //Only run the capture of number of claims when claims have been made in the last 5 years. "Business Rule" not consider older.
-            Refactored.propertyDetailsCaptureClaimsVolume();
+            RemovingRepetition.propertyDetailsCaptureClaimsVolume();
         } else {
             claimsVolume = 0;
         }
@@ -305,7 +305,7 @@ public class Refactored {
 
         //}
         claimsVolume = scanner.nextInt();
-        Refactored.scannerFlush();
+        RemovingRepetition.scannerFlush();
         System.out.println();
     }
 
@@ -319,8 +319,8 @@ public class Refactored {
 
         //}
         String subsidencePreConversion = scanner.nextLine();
-        Refactored.scannerFlush();
-        subsidenceIndicator = Refactored.validatedOutputToIndicator(subsidencePreConversion);
+        RemovingRepetition.scannerFlush();
+        subsidenceIndicator = RemovingRepetition.validatedOutputToIndicator(subsidencePreConversion);
         System.out.println();
     }
 
@@ -330,7 +330,7 @@ public class Refactored {
                 Confirm (Y/N)
                 """, firstName);
         String smokerPreConversion = scanner.nextLine();
-        smokersIndicator = Refactored.validatedOutputToIndicator(smokerPreConversion);
+        smokersIndicator = RemovingRepetition.validatedOutputToIndicator(smokerPreConversion);
         System.out.println();
     }
 
@@ -400,7 +400,7 @@ public class Refactored {
             //Adding Do While loop to accept valid actions only
             System.out.println("Enter a number from those on screen to continue.");
             menuOption = scanner.nextInt();
-            Refactored.scannerFlush();
+            RemovingRepetition.scannerFlush();
             System.out.println();
             if (!(menuOption > 0 && menuOption < 8)) {
                 System.out.printf("""
@@ -412,28 +412,28 @@ public class Refactored {
         switch (menuOption) {
             //Run a specific Method dependent on what the user selection
             case 1:
-                Refactored.scannerFlush();
-                Refactored.propertyDetailsCaptureHomeValue();
+                RemovingRepetition.scannerFlush();
+                RemovingRepetition.propertyDetailsCaptureHomeValue();
                 break;
             case 2:
-                Refactored.scannerFlush();
-                Refactored.propertyDetailsCaptureBuildingsLimit();
+                RemovingRepetition.scannerFlush();
+                RemovingRepetition.propertyDetailsCaptureBuildingsLimit();
                 break;
             case 3:
-                Refactored.scannerFlush();
-                Refactored.propertyDetailsCaptureContentsLimit();
+                RemovingRepetition.scannerFlush();
+                RemovingRepetition.propertyDetailsCaptureContentsLimit();
                 break;
             case 4:
-                Refactored.scannerFlush();
-                Refactored.propertyDetailsCaptureSubsidenceIndicator();
+                RemovingRepetition.scannerFlush();
+                RemovingRepetition.propertyDetailsCaptureSubsidenceIndicator();
                 break;
             case 5:
-                Refactored.scannerFlush();
-                Refactored.propertyDetailsCaptureClaimsIndicator();
+                RemovingRepetition.scannerFlush();
+                RemovingRepetition.propertyDetailsCaptureClaimsIndicator();
                 break;
             case 6:
-                Refactored.scannerFlush();
-                Refactored.propertyDetailsCaptureSmokersIndicator();
+                RemovingRepetition.scannerFlush();
+                RemovingRepetition.propertyDetailsCaptureSmokersIndicator();
                 break;
             case 7:
                 break;
@@ -477,7 +477,7 @@ public class Refactored {
     // INCOMPLETE *********************************************************************
     public static void pricingAlgo() {
         //Modify core risk premium that is fixed for customer quote.About which the selection modifiers adjust final price.
-        Refactored.generateRiskDouble();
+        RemovingRepetition.generateRiskDouble();
         double buildLimitMod = 0.00;
         double contLimitMod = 0.00;
         double homeValueMod = 0.00;
@@ -547,16 +547,16 @@ public class Refactored {
                     Confirm (Y/N).
                     """);
             String preValidate = scanner.nextLine();
-            if (Refactored.validatedOutputToIndicator(preValidate) == 1) {
+            if (RemovingRepetition.validatedOutputToIndicator(preValidate) == 1) {
                 combinedInd = -1;
-                Refactored.kickOutAction();
+                RemovingRepetition.kickOutAction();
             } else {
                 System.out.println("""
                         Ok, we will re-ask both questions to collect the correct data.
                         """);
-                Refactored.propertyDetailsCaptureBuildingsLimit();
-                Refactored.propertyDetailsCaptureContentsLimit();
-                Refactored.setCombinedInd();
+                RemovingRepetition.propertyDetailsCaptureBuildingsLimit();
+                RemovingRepetition.propertyDetailsCaptureContentsLimit();
+                RemovingRepetition.setCombinedInd();
             }
         }
     }
@@ -574,8 +574,8 @@ public class Refactored {
                         Confirm (Y/N)
                         """, addressFirstLine, addressPostCode);
                 String preValidate = scanner.nextLine();
-                if (Refactored.validatedOutputToIndicator(preValidate) == 1) {
-                    Refactored.kickOutAction();
+                if (RemovingRepetition.validatedOutputToIndicator(preValidate) == 1) {
+                    RemovingRepetition.kickOutAction();
                 }
             } else if (subsidenceIndicator == 0 && claimsVolume >= 3) {
                 System.out.println("""
@@ -584,8 +584,8 @@ public class Refactored {
                         Confirm (Y/N)
                         """);
                 String preValidate = scanner.nextLine();
-                if (Refactored.validatedOutputToIndicator(preValidate) == 1) {
-                    Refactored.kickOutAction();
+                if (RemovingRepetition.validatedOutputToIndicator(preValidate) == 1) {
+                    RemovingRepetition.kickOutAction();
                 }
             } else {
                 System.out.printf("""
@@ -596,8 +596,8 @@ public class Refactored {
                         Confirm (Y/N)
                         """, addressFirstLine, addressPostCode);
                 String preValidate = scanner.nextLine();
-                if (Refactored.validatedOutputToIndicator(preValidate) == 1) {
-                    Refactored.kickOutAction();
+                if (RemovingRepetition.validatedOutputToIndicator(preValidate) == 1) {
+                    RemovingRepetition.kickOutAction();
                 }
             }
         }
