@@ -13,8 +13,10 @@ public class Manager {
         while (true) {
             System.out.println("""
                     Hello and welcome to the programme.
-                    Would you like to open a new policy (O)
-                    or view existing policy detail (V)?
+                    Navigate using the following character options:
+                    Option (O): Open a new policy
+                    Option (V): View an existing policy
+                    Option (N): Exit
                     """);
             String option = scanner.nextLine().toLowerCase();
 
@@ -45,6 +47,8 @@ public class Manager {
                 } catch (InvalidAccountNumberException e) {
                     System.err.println(e.getMessage());
                 }
+            }else if (option.equals("n")) {
+                terminateProgramme();
             }
 
             System.out.println("\nWould you like to make another interaction? (Y/N)");
@@ -60,9 +64,14 @@ public class Manager {
 
         // End Process
         scanner.close();
-        System.out.println("Thank you for insuring with us.");
-        System.exit(1);
+        terminateProgramme();
+    }
 
+    // Repeatable class to terminate the programme when required.
+    private void terminateProgramme(){
+        System.out.println("Thank you for insuring with us.");
+        // End Programme immediately.
+        System.exit(1);
     }
 }
 
