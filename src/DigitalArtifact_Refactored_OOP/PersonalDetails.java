@@ -4,30 +4,6 @@ import java.util.Scanner;
 
 public class PersonalDetails {
 
-    public String get_firstName() {
-        return _firstName;
-    }
-
-    public String get_surname() {
-        return _surname;
-    }
-
-    public String get_addressFirstLine() {
-        return _addressFirstLine;
-    }
-
-    public String get_addressPostCode() {
-        return _addressPostCode;
-    }
-
-    public int get_yearsAtAddress() {
-        return _yearsAtAddress;
-    }
-
-    public int get_menuOption() {
-        return _menuOption;
-    }
-
     private Scanner _scanner = new Scanner(System.in);
     private String _firstName = "";
     private String _surname = "";
