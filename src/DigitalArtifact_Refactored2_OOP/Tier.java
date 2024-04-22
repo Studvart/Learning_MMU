@@ -3,7 +3,7 @@ package DigitalArtifact_Refactored2_OOP;
 public class Tier {
 
     //Product benefits
-    public void benefits(){
+    public void tierBenefits(){
         System.out.println("""
                 All policies cover:
                 Buildings for: fire, flood and storm damage

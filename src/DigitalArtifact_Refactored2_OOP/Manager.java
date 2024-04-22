@@ -1,5 +1,7 @@
 package DigitalArtifact_Refactored2_OOP;
 
+// Required packages to be present to run functions in this class.
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -8,7 +10,6 @@ public class Manager {
 
     public void processManager() {
         // Collect basic details
-        // Offer polymorphic options B/S/G
         while (true) {
             System.out.println("""
                     Hello and welcome to the programme.
@@ -52,7 +53,13 @@ public class Manager {
             if (input.equals("n")) break;
         }
 
+
+        // Offer interaction with polymorphic options B/S/G
+
+        // ******* Need Array idea ********
+
         // End Process
+        scanner.close();
         System.out.println("Thank you for insuring with us.");
         System.exit(1);
 
