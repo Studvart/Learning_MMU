@@ -10,7 +10,23 @@ public class Manager {
 
     public void processManager() {
         // Collect basic details
+        initialMenu();
+
+        // Offer interaction with polymorphic options B/S/G
+
+        // ******* Need Array idea ********
+
+        // ******* Testing scenarios required *******
+
+        // End Process
+        scanner.close();
+        terminateProgramme();
+    }
+
+    public void initialMenu() {
         while (true) {
+
+            Product product = new Product();
             System.out.println("""
                     Hello and welcome to the programme.
                     Navigate using the following character options:
@@ -23,6 +39,7 @@ public class Manager {
             if (option.equals("o")) {
                 Customer customer = new Customer();
                 customer.createPolicyRecord();
+
             } else if (option.equals("v")) {
                 System.out.println("Please enter the policy number to review:");
 
@@ -30,24 +47,21 @@ public class Manager {
                     int policyNumber = scanner.nextInt();
                     scanner.nextLine();
 
-                    if (policyNumber < 100000000)
-                        throw new InvalidAccountNumberException("Policy number is invalid, minimum = 100,000,000", policyNumber);
-                    else if (policyNumber > 999999999)
-                        throw new InvalidAccountNumberException("Policy number is invalid, maximum = 999,999,999", policyNumber);
+                    product.checkPolicyNumber(policyNumber);
 
                     Customer foundCustomer = ReadFile.accessPolicyData(policyNumber);
 
                     if (foundCustomer == null)
-                        throw new InvalidAccountNumberException("Account was not found", policyNumber);
+                        throw new InvalidPolicyNumberException("Account was not found", policyNumber);
 
                     foundCustomer.customerInformation();
                 } catch (InputMismatchException e) {
                     System.err.println("Please enter a valid integer for the policy number.");
                     scanner.nextLine();
-                } catch (InvalidAccountNumberException e) {
+                } catch (InvalidPolicyNumberException e) {
                     System.err.println(e.getMessage());
                 }
-            }else if (option.equals("n")) {
+            } else if (option.equals("n")) {
                 terminateProgramme();
             }
 
@@ -56,20 +70,11 @@ public class Manager {
 
             if (input.equals("n")) break;
         }
-
-
-        // Offer interaction with polymorphic options B/S/G
-
-        // ******* Need Array idea ********
-
-        // End Process
-        scanner.close();
-        terminateProgramme();
     }
 
     // Repeatable class to terminate the programme when required.
-    private void terminateProgramme(){
-        System.out.println("Thank you for insuring with us.");
+    private void terminateProgramme() {
+        System.out.println("Thank you for interacting with SAG Bank Insurance Services Limited.");
         // End Programme immediately.
         System.exit(1);
     }

@@ -6,19 +6,16 @@ import java.util.Scanner;
 public class Customer {
 
     private final Scanner scanner = new Scanner(System.in);
-    private final int policyNumberMax = 999999999;
-    private final int policyNumberMin = 100000000;
+    Product product = new Product();
     private int policyNumber;
     private String firstName;
     private String surname;
     private Tier tier;
     private String tierSelected;
 
-
     // Default Run - Create a non-existent customer
     public Customer() {
     }
-
 
     // Retrieve existing customer
     public Customer(int polNum, String firstNam, String lastNam, String TSelect) {
@@ -32,32 +29,16 @@ public class Customer {
         return policyNumber;
     }
 
-    public void setPolicyNumber(int policyNumber) {
-        this.policyNumber = policyNumber;
-    }
-
     public String getFirstName() {
         return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
     }
 
     public String getSurname() {
         return surname;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
     public String getTierSelected() {
         return tierSelected;
-    }
-
-    public void setTierSelected(String tierSel) {
-        this.tierSelected = tierSel;
     }
 
     public void createPolicyRecord() {
@@ -66,17 +47,38 @@ public class Customer {
         firstName = scanner.next();
         System.out.println("What is your surname?");
         surname = scanner.next();
-        System.out.println("What Tier of cover do you require?");
-        System.out.println("""
-                All policies cover:
-                Buildings for: fire, flood and storm damage
-                Contents for : the same as buildings + theft and freezer food losses.
-                """);
-        System.out.println("""
-                Bronze provides:                | Silver provides:              | Gold provides:
-                Buildings Adds: Drain damage.   | Bronze and                    | Bronze, Silver and
-                Contents Adds: Valuable items.  | Legal Expenses up to £50k.    | Home Emergencies up to £1k per claim.
-                """);
+        tierSelection();
+
+        assignPolicyNumber();
+
+        System.out.printf("""
+                Policy has been created successfully.
+                Associated to customer: %s %s.
+                Your reference number is %d.
+                You have selected tier: %s
+                """, firstName, surname, policyNumber, tierSelected);
+
+        WriteFile.writeCustomerFile(this);
+    }
+
+    public void customerInformation() {
+        System.out.println("Policy Number: " + policyNumber);
+        System.out.println("First Name: " + firstName);
+        System.out.println("Surname: " + surname);
+        System.out.println("Tier: " + tierSelected);
+    }
+
+    public void assignPolicyNumber() {
+        //Force policy number between parameter defined numbers
+        while (!(policyNumber > product.getPolicyNumberMin() && policyNumber < product.getPolicyNumberMax())) {
+            policyNumber = (int) ((Math.random() * (product.getPolicyNumberMax() - product.getPolicyNumberMin())) + product.getPolicyNumberMin());
+        }
+    }
+
+    public void tierSelection() {
+        System.out.println("Here are our tiered options:");
+        product.productBenefits();
+        System.out.printf("%s%s%s", product.productBenefitsBronze(),product.productBenefitsSilver(),product.productBenefitsGold());
 
         int _option;
         do { //Adding Do While loop to accepts valid actions only
@@ -108,24 +110,5 @@ public class Customer {
                 tierSelected = "Gold";
                 break;
         }
-
-        //Force policy number between parameter defined numbers
-        policyNumber = (int) ((Math.random() * (policyNumberMax - policyNumberMin)) + policyNumberMin);
-
-        System.out.printf("""
-                Policy has been created successfully.
-                Associated to customer: %s %s.
-                Your reference number is %d.
-                You have selected tier: %s
-                """, firstName, surname, policyNumber, tierSelected);
-
-        WriteFile.writeCustomerFile(this);
-    }
-
-    public void customerInformation() {
-        System.out.println("Policy Number: " + policyNumber);
-        System.out.println("First Name: " + firstName);
-        System.out.println("Surname: " + surname);
-        System.out.println("Tier: " + tierSelected);
     }
 }

@@ -38,7 +38,7 @@ public class Main {
 
     Feature Set 1:
     Are at least 2 Implemented? -- Yes
-    - A Data Object                        |    Yes - See Customer and Tier Class'
+    - A Data Object                        |    Yes - See Customer and Product Class'
     - File Input                           |    Yes - See ReadFile Class
     - File Output                          |    Yes - See WriteFile Class
     - Custom Exceptions                    |    Yes - See InvalidAccountNumberException (***cannot rename and work)
