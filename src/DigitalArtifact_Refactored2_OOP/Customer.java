@@ -47,7 +47,10 @@ public class Customer {
         firstName = scanner.next();
         System.out.println("What is your surname?");
         surname = scanner.next();
-        tierSelection();
+
+        tier = new Tier();
+        tierSelected = tier.tierSelection();
+        tier = tier.get_tier();
 
         assignPolicyNumber();
 
@@ -55,7 +58,7 @@ public class Customer {
                 Policy has been created successfully.
                 Associated to customer: %s %s.
                 Your reference number is %d.
-                You have selected tier: %s
+                You have selected tier: %s.
                 """, firstName, surname, policyNumber, tierSelected);
 
         WriteFile.writeCustomerFile(this);
@@ -75,40 +78,4 @@ public class Customer {
         }
     }
 
-    public void tierSelection() {
-        System.out.println("Here are our tiered options:");
-        product.productBenefits();
-        System.out.printf("%s%s%s", product.productBenefitsBronze(),product.productBenefitsSilver(),product.productBenefitsGold());
-
-        int _option;
-        do { //Adding Do While loop to accepts valid actions only
-            System.out.println("""
-                    Which tier would you like?
-                    1. Bronze, 2. Silver, 3. Gold
-                    Input the corresponding integer.
-                    """);
-            _option = scanner.nextInt();
-            if (!(_option > 0 && _option < 4)) {
-                System.out.printf("""
-                        %d is not a valid input.
-                        Please select a valid integer from on screen.
-                        """, _option);
-            }
-        } while (!(_option > 0 && _option < 4));
-
-        switch (_option) {
-            case 1:
-                tier = new Tier_Bronze();
-                tierSelected = "Bronze";
-                break;
-            case 2:
-                tier = new Tier_Silver();
-                tierSelected = "Silver";
-                break;
-            case 3:
-                tier = new Tier_Gold();
-                tierSelected = "Gold";
-                break;
-        }
-    }
 }

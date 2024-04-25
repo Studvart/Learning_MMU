@@ -19,41 +19,4 @@ public class Product {
             throw new InvalidPolicyNumberException("Policy number is invalid, maximum = 999,999,999", _inputPolicyNumber);
     }
 
-    //Product benefits
-    public void productBenefits() {
-        System.out.println("""
-                All policies cover:
-                Buildings for: fire, flood and storm damage
-                Contents for : the same as buildings + theft and freezer food losses.
-                ----------------------------------------------------------------------
-                """);
-    }
-
-    public String productBenefitsBronze() {
-        return ("""
-                Bronze provides:
-                Buildings Adds: Drain damage.
-                Contents Adds: Valuable items.
-                ---------------------------------------
-                """);
-    }
-
-    public String productBenefitsSilver() {
-        return ("""
-                Silver provides:
-                Bronze and
-                Legal Expenses up to £50k.
-                ---------------------------------------
-                """);
-    }
-
-    public String productBenefitsGold() {
-        return ("""
-                Gold provides:
-                Bronze, Silver and
-                Home Emergencies up to £1k per claim.
-                ---------------------------------------
-                """);
-    }
-
 }

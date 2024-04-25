@@ -41,7 +41,7 @@ public class Main {
     - A Data Object                        |    Yes - See Customer and Product Class'
     - File Input                           |    Yes - See ReadFile Class
     - File Output                          |    Yes - See WriteFile Class
-    - Custom Exceptions                    |    Yes - See InvalidAccountNumberException (***cannot rename and work)
+    - Custom Exceptions                    |    Yes - See InvalidPolicyNumberException
     - User friendly UI                     |    Yes - See try-catch in ReadFile and do-while in Customer and .toLowerCase() in process manager.
 
     Feature Set 2:
