@@ -48,18 +48,13 @@ public class Customer {
         System.out.println("What is your surname?");
         surname = scanner.next();
 
-        tier = new Tier();
-        tierSelected = tier.tierSelection();
-        tier = tier.get_tier();
-
         assignPolicyNumber();
 
         System.out.printf("""
                 Policy has been created successfully.
                 Associated to customer: %s %s.
                 Your reference number is %d.
-                You have selected tier: %s.
-                """, firstName, surname, policyNumber, tierSelected);
+                """, firstName, surname, policyNumber);
 
         WriteFile.writeCustomerFile(this);
     }
@@ -68,7 +63,6 @@ public class Customer {
         System.out.println("Policy Number: " + policyNumber);
         System.out.println("First Name: " + firstName);
         System.out.println("Surname: " + surname);
-        System.out.println("Tier: " + tierSelected);
     }
 
     public void assignPolicyNumber() {

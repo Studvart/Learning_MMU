@@ -9,6 +9,15 @@ public class Tier {
     private final String _highestTier = "Gold";
     protected int benefitOption;
     private Tier _tier;
+
+    public String get_tierSelected() {
+        return _tierSelected;
+    }
+
+    public void set_tierSelected(String _tierSelected) {
+        this._tierSelected = _tierSelected;
+    }
+
     private String _tierSelected;
     private int optionsAvailable = 0;
 
@@ -68,16 +77,19 @@ public class Tier {
     public Tier returnTierFromTierSelected(String _inputTierSelected) {
         switch (_inputTierSelected) {
             case _lowestTier -> {
-                _tier = new Tier_Bronze();
                 _tierSelected = _lowestTier;
+                _tier = new Tier_Bronze();
+                _tier._tierSelected = _lowestTier;
             }
             case _middleTier -> {
-                _tier = new Tier_Silver();
                 _tierSelected = _middleTier;
+                _tier = new Tier_Silver();
+                _tier._tierSelected = _middleTier;
             }
             case _highestTier -> {
-                _tier = new Tier_Gold();
                 _tierSelected = _highestTier;
+                _tier = new Tier_Gold();
+                _tier._tierSelected = _highestTier;
             }
         }
         return _tier;
@@ -127,23 +139,30 @@ public class Tier {
         tierBenefitsGold();
     }
 
-    protected void accessRewards() {
+    protected void accessRewards(String _inputTierSelected) {
+        int _maxOptions = availableBenefitOptions();
         do {
             System.out.println("""
                     Which benefit would you like to access?
                     Navigate using the following integer options:
                     Option (1): Make a buildings claim
-                    Option (2): Make a contents claim
-                    """);
+                    Option (2): Make a contents claim""");
+            if (_inputTierSelected.equals(_middleTier)  || _inputTierSelected.equals(_highestTier)){
+                System.out.println("Option (3): Make a Legal claim");
+
+            }
+            if (_inputTierSelected.equals(_highestTier)) {
+                System.out.println("Option (4): Make a Home Emergency claim");
+            }
 
             benefitOption = scanner.nextInt();
             scanner.nextLine();
-            if (benefitOption > 0 && benefitOption < availableBenefitOptions()) {
+            if (benefitOption > 0 && benefitOption <= _maxOptions) {
                 break;
             }
             System.out.printf("%d is not a valid option, please select an option from the menu.", benefitOption);
 
-        } while (!(benefitOption > 0 && benefitOption < availableBenefitOptions()));
+        } while (!(benefitOption > 0 && benefitOption <= _maxOptions));
 
         switch (benefitOption) {
             case 1:

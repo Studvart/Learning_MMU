@@ -2,12 +2,8 @@ package DigitalArtifact_Refactored2_OOP;
 
 public class Tier_Silver extends Tier_Bronze {
     @Override
-    protected void accessRewards() {
-        super.accessRewards();
-
-        System.out.println("""
-                Option (3): Make a Legal claim
-                """);
+    protected void accessRewards(String _inputTierSelected) {
+        super.accessRewards(_inputTierSelected);
 
         switch (benefitOption) {
             case 3:
@@ -18,5 +14,9 @@ public class Tier_Silver extends Tier_Bronze {
                         """);
                 break;
         }
+    }
+
+    protected void silverRewards(){
+        System.out.println("Option (3): Make a Legal claim");
     }
 }

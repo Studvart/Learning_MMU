@@ -8,17 +8,20 @@ import java.util.Scanner;
 public class Manager {
     Scanner scanner = new Scanner(System.in);
     Product product = new Product();
+    private String tierSelected;
     //Tier _appliedTier;
 
     public void processManager() {
         Customer customer = new Customer();
-        Tier tier = new Tier();
         // Collect basic details
         customerRetrieveMenu();
 
         // Offer interaction with polymorphic options B/S/G
-        tier = tier.returnTier();
-        tier.accessRewards();
+        Tier tier = new Tier();
+        System.out.println("We will now look at the level of cover you want.");
+        tierSelected = tier.tierSelection();
+        tier.set_tierSelected(tierSelected);
+        tier.accessRewards(tierSelected);
 
         // ******* Need Array idea ********
         // Customer satisfaction survey
