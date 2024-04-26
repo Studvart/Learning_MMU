@@ -33,7 +33,8 @@ public class Manager {
         terminateProgramme();
     }
 
-    public void customerRetrieveMenu() {
+    public Customer customerRetrieveMenu() {
+        Customer c = null;
         while (true) {
             System.out.println("""
                     Hello and welcome to the programme.
@@ -45,7 +46,7 @@ public class Manager {
             String option = scanner.nextLine().toLowerCase();
 
             if (option.equals("o")) {
-                createNewCustomer();
+                c = createNewCustomer();
             } else if (option.equals("v")) {
                 retreiveExistingCustomer();
             } else if (option.equals("e")) {
@@ -64,7 +65,7 @@ public class Manager {
             if (input.equals("e")) {
                 terminateProgramme();
             } else if (input.equals("p")) {
-                break;
+                return c;
             }
         }
     }
@@ -76,9 +77,10 @@ public class Manager {
         System.exit(1);
     }
 
-    private void createNewCustomer() {
+    private Customer createNewCustomer() {
         Customer customer = new Customer();
         customer.createPolicyRecord();
+        return customer;
     }
 
     private void retreiveExistingCustomer() {
